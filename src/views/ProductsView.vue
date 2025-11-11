@@ -3,7 +3,7 @@
     <!-- Contenido principal -->
     <div class="main-content flex-grow-1">
       <NavbarComponent />
-      
+
       <div class="products-container container py-4">
         <!-- Estado de carga -->
         <div v-if="loading" class="loading-container text-center py-5">
@@ -25,25 +25,16 @@
             <div v-for="book in availableBooks" :key="book.id" class="col-md-4">
               <div class="card h-100">
                 <div class="card-image-wrapper">
-                  <img 
-                    :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()" 
-                    class="card-img-top" 
-                    :alt="book.title"
-                    @error="handleImageError($event)"
-                  >
-                  <button 
-                    class="favorite-btn" 
-                    @click="toggleFavorite(book)"
-                    :class="{ active: isFavorite(book.id) }"
-                    :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
-                  >
+                  <img :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()"
+                    class="card-img-top" :alt="book.title" @error="handleImageError($event)">
+                  <button class="favorite-btn" @click="toggleFavorite(book)" :class="{ active: isFavorite(book.id) }"
+                    :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'">
                     <i :class="isFavorite(book.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                   </button>
                 </div>
                 <div class="card-body">
                   <h5 class="card-title">{{ book.title }}</h5>
                   <p class="card-text">{{ book.author }}</p>
-                  <p class="card-text">{{ book.description }}</p>
                   <p v-if="!book.discountPercentage" class="card-text fw-bold">${{ book.price }}</p>
                   <div v-else class="price-container">
                     <span class="original-price">${{ book.price }}</span>
@@ -65,18 +56,10 @@
             <div v-for="book in upcomingBooks" :key="book.id" class="col-md-4">
               <div class="card h-100">
                 <div class="card-image-wrapper">
-                  <img 
-                    :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()" 
-                    class="card-img-top" 
-                    :alt="book.title"
-                    @error="handleImageError($event)"
-                  >
-                  <button 
-                    class="favorite-btn" 
-                    @click="toggleFavorite(book)"
-                    :class="{ active: isFavorite(book.id) }"
-                    :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
-                  >
+                  <img :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()"
+                    class="card-img-top" :alt="book.title" @error="handleImageError($event)">
+                  <button class="favorite-btn" @click="toggleFavorite(book)" :class="{ active: isFavorite(book.id) }"
+                    :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'">
                     <i :class="isFavorite(book.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                   </button>
                   <div class="coming-soon-badge">Próximamente</div>
@@ -84,7 +67,6 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ book.title }}</h5>
                   <p class="card-text">{{ book.author }}</p>
-                  <p class="card-text">{{ book.description }}</p>
                   <p class="card-text">
                     <small class="text-muted">Disponible: {{ formatDate(book.releaseDate) }}</small>
                   </p>
@@ -104,18 +86,10 @@
             <div v-for="book in discountedBooks" :key="book.id" class="col-md-4">
               <div class="card h-100">
                 <div class="card-image-wrapper">
-                  <img 
-                    :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()" 
-                    class="card-img-top" 
-                    :alt="book.title"
-                    @error="handleImageError($event)"
-                  >
-                  <button 
-                    class="favorite-btn" 
-                    @click="toggleFavorite(book)"
-                    :class="{ active: isFavorite(book.id) }"
-                    :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
-                  >
+                  <img :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()"
+                    class="card-img-top" :alt="book.title" @error="handleImageError($event)">
+                  <button class="favorite-btn" @click="toggleFavorite(book)" :class="{ active: isFavorite(book.id) }"
+                    :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'">
                     <i :class="isFavorite(book.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                   </button>
                   <div class="discount-badge">-{{ book.discountPercentage }}%</div>
@@ -123,7 +97,6 @@
                 <div class="card-body">
                   <h5 class="card-title">{{ book.title }}</h5>
                   <p class="card-text">{{ book.author }}</p>
-                  <p class="card-text">{{ book.description }}</p>
                   <div class="price-container">
                     <span class="original-price">${{ book.price }}</span>
                     <span class="discounted-price">${{ book.discountedPrice }}</span>
@@ -149,12 +122,8 @@
             <div v-for="event in events" :key="event.id" class="col-md-4">
               <div class="event-card">
                 <div class="event-image-wrapper">
-                  <img 
-                    :src="event.imageUrl && event.imageUrl.trim() !== '' ? event.imageUrl : getPlaceholderImage()" 
-                    class="event-image" 
-                    :alt="event.title"
-                    @error="handleImageError($event)"
-                  >
+                  <img :src="event.imageUrl && event.imageUrl.trim() !== '' ? event.imageUrl : getPlaceholderImage()"
+                    class="event-image" :alt="event.title" @error="handleImageError($event)">
                   <div class="event-date-badge">
                     <div class="event-day">{{ formatEventDay(event.date) }}</div>
                     <div class="event-month">{{ formatEventMonth(event.date) }}</div>
@@ -180,7 +149,7 @@
           </div>
         </section>
       </div>
-      
+
       <FooterComponent />
     </div>
 
@@ -190,7 +159,7 @@
         <button class="book-modal-close" @click="closeCartModal">
           <i class="bi bi-x-lg"></i>
         </button>
-        
+
         <div class="cart-modal-header">
           <h2>
             <i class="bi bi-cart-fill"></i>
@@ -208,11 +177,8 @@
           <div v-else class="cart-items-container">
             <div v-for="(item, index) in cart" :key="item.id || index" class="cart-item">
               <div class="cart-item-image">
-                <img 
-                  :src="item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : getPlaceholderImage()" 
-                  :alt="item.title"
-                  @error="handleImageError($event)"
-                >
+                <img :src="item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : getPlaceholderImage()"
+                  :alt="item.title" @error="handleImageError($event)">
               </div>
               <div class="cart-item-info">
                 <h4 class="cart-item-title">{{ item.title }}</h4>
@@ -283,9 +249,9 @@ export default {
   },
   computed: {
     availableBooks() {
-      return this.books.filter(book => 
-        book.status === 'available' && 
-        book.stock > 0 && 
+      return this.books.filter(book =>
+        book.status === 'available' &&
+        book.stock > 0 &&
         book.discountPercentage === 0
       );
     },
@@ -293,9 +259,9 @@ export default {
       return this.books.filter(book => book.status === 'upcoming');
     },
     discountedBooks() {
-      return this.books.filter(book => 
-        book.status === 'available' && 
-        book.stock > 0 && 
+      return this.books.filter(book =>
+        book.status === 'available' &&
+        book.stock > 0 &&
         book.discountPercentage > 0
       );
     },
@@ -311,12 +277,12 @@ export default {
     this.loadEvents();
     this.loadCart();
     this.loadFavorites();
-    
+
     // Guardar referencia a la función para poder removerla después
     this.handleShowCartModal = () => {
       this.showCartModal = true;
     };
-    
+
     // Escuchar evento para mostrar el carrito desde el navbar
     window.addEventListener('show-cart-modal', this.handleShowCartModal);
   },
@@ -331,24 +297,24 @@ export default {
       try {
         const eventsCollection = collection(db, 'events');
         const querySnapshot = await getDocs(eventsCollection);
-        
+
         this.events = querySnapshot.docs.map(doc => {
           const data = doc.data();
           const eventData = {
             id: doc.id,
             ...data
           };
-          
+
           // Convertir Timestamp de Firestore a Date si es necesario
           if (eventData.date && eventData.date.toDate) {
             eventData.date = eventData.date.toDate();
           } else if (eventData.date && typeof eventData.date === 'string') {
             eventData.date = new Date(eventData.date);
           }
-          
+
           return eventData;
         });
-        
+
         console.log('Eventos cargados desde Firestore:', this.events.length);
       } catch (error) {
         console.error('Error al cargar eventos desde Firestore:', error);
@@ -357,25 +323,25 @@ export default {
     async loadBooks() {
       this.loading = true;
       this.error = null;
-      
+
       try {
         const booksCollection = collection(db, 'books');
         const querySnapshot = await getDocs(booksCollection);
-        
+
         this.books = querySnapshot.docs.map(doc => {
           const data = doc.data();
           const bookData = {
             id: doc.id,
             ...data
           };
-          
+
           // Convertir Timestamp de Firestore a Date si es necesario
           if (bookData.releaseDate && bookData.releaseDate.toDate) {
             bookData.releaseDate = bookData.releaseDate.toDate();
           } else if (bookData.releaseDate && typeof bookData.releaseDate === 'string') {
             bookData.releaseDate = new Date(bookData.releaseDate);
           }
-          
+
           // Calcular precio con descuento si existe
           if (bookData.discountPercentage && bookData.discountPercentage > 0) {
             bookData.discountedPrice = parseFloat(
@@ -384,32 +350,32 @@ export default {
           } else {
             bookData.discountedPrice = bookData.price;
           }
-          
+
           // Asegurar que discountPercentage tenga un valor por defecto
           if (!bookData.discountPercentage) {
             bookData.discountPercentage = 0;
           }
-          
+
           // Asegurar que stock tenga un valor por defecto
           if (bookData.stock === undefined || bookData.stock === null) {
             bookData.stock = 0;
           }
-          
+
           // Asegurar que imageUrl se preserve si existe (puede ser string vacío, null o undefined)
           // Si no existe o está vacío, se manejará en el template con getPlaceholderImage()
           if (!bookData.imageUrl || bookData.imageUrl.trim() === '') {
             bookData.imageUrl = null; // Marcar como null para que el template use el placeholder
           }
-          
+
           console.log('Libro cargado:', {
             id: bookData.id,
             title: bookData.title,
             imageUrl: bookData.imageUrl
           });
-          
+
           return bookData;
         });
-        
+
         console.log('Libros cargados desde Firestore:', this.books.length);
       } catch (error) {
         console.error('Error al cargar los libros desde Firestore:', error);
@@ -420,16 +386,16 @@ export default {
     },
     formatDate(date) {
       if (!date) return '';
-      
+
       try {
         // Si es un objeto Date, usarlo directamente
         const dateObj = date instanceof Date ? date : new Date(date);
-        
+
         // Verificar que la fecha sea válida
         if (isNaN(dateObj.getTime())) {
           return 'Fecha no disponible';
         }
-        
+
         return dateObj.toLocaleDateString('es-ES', {
           year: 'numeric',
           month: 'long',
@@ -460,7 +426,7 @@ export default {
     },
     addToCart(book) {
       const existingItem = this.cart.find(item => item.id === book.id);
-      
+
       if (existingItem) {
         existingItem.quantity = (existingItem.quantity || 1) + 1;
       } else {
@@ -469,9 +435,9 @@ export default {
           quantity: 1
         });
       }
-      
+
       this.saveCart();
-      
+
       // Mostrar notificación sin abrir el modal
       this.showNotification(`"${book.title}" agregado al carrito`);
     },
@@ -526,7 +492,7 @@ export default {
     },
     toggleFavorite(book) {
       const index = this.favorites.findIndex(fav => fav.id === book.id);
-      
+
       if (index > -1) {
         this.favorites.splice(index, 1);
         this.showNotification(`"${book.title}" eliminado de favoritos`);
@@ -541,9 +507,10 @@ export default {
         });
         this.showNotification(`"${book.title}" agregado a favoritos`);
       }
-      
+
       this.saveFavorites();
     },
+
     showNotification(message) {
       // Crear notificación temporal
       const notification = document.createElement('div');
@@ -555,12 +522,13 @@ export default {
         </div>
       `;
       document.body.appendChild(notification);
-      
+
       setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
       }, 2000);
     },
+
     getPlaceholderImage() {
       // Retornar una imagen placeholder en base64 o una URL de placeholder service
       return 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjMwMCIgZmlsbD0iIzE3MmE0NSIvPjx0ZXh0IHg9IjUwJSIgeT0iNTAlIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMTgiIGZpbGw9IiM4ODkyYjAiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGR5PSIuM2VtIj5TaW4gSW1hZ2VuPC90ZXh0Pjwvc3ZnPg==';
@@ -590,13 +558,7 @@ export default {
       }
     },
     notifyMe(book) {
-      // Implementar sistema de notificaciones
-      this.notifications.push({
-        bookId: book.id,
-        userId: 'currentUserId', // Obtener del estado de autenticación
-        email: 'user@email.com' // Obtener del estado de autenticación
-      });
-      console.log('Te notificaremos cuando esté disponible:', book.title);
+      this.showNotification(`cuando el "${book.title}" te lo notificaremos`);
     }
   }
 };
@@ -679,6 +641,10 @@ export default {
 
 .card-body {
   padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-content: space-evenly;
 }
 
 .card-title {
@@ -957,7 +923,7 @@ export default {
   .products-container {
     padding: 1rem 0.5rem;
   }
-  
+
   .section-title {
     font-size: 2rem;
   }

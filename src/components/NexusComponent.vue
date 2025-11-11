@@ -173,7 +173,6 @@
                   <p class="event-location">
                     <i class="bi bi-geo-alt"></i> {{ event.location || 'Ubicación por confirmar' }}
                   </p>
-                  <p class="event-description">{{ event.description }}</p>
                 </div>
               </div>
             </div>

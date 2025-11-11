@@ -61,33 +61,18 @@
                         <td class="text-center">{{ book.title }}</td>
                         <td class="text-center">{{ book.author }}</td>
                         <td class="text-center">
-                          <input 
-                            type="number" 
-                            v-model.number="book.stock"
-                            class="form-control form-control-sm"
-                            min="0"
-                            @change="updateStock(book)"
-                          >
+                          <input type="number" v-model.number="book.stock" class="form-control form-control-sm" min="0"
+                            @change="updateStock(book)">
                         </td>
                         <td>
                           <div class="input-group input-group-sm">
                             <span class="input-group-text">$</span>
-                            <input 
-                              type="number" 
-                              v-model.number="book.price"
-                              class="form-control form-control-sm"
-                              min="0"
-                              step="0.01"
-                              @change="updateBook(book)"
-                            >
+                            <input type="number" v-model.number="book.price" class="form-control form-control-sm"
+                              min="0" step="0.01" @change="updateBook(book)">
                           </div>
                         </td>
                         <td>
-                          <select 
-                            v-model="book.status" 
-                            class="form-select form-select-sm"
-                            @change="updateBook(book)"
-                          >
+                          <select v-model="book.status" class="form-select form-select-sm" @change="updateBook(book)">
                             <option value="available">Disponible</option>
                             <option value="upcoming">Próximamente</option>
                             <option value="outOfStock">Agotado</option>
@@ -95,14 +80,8 @@
                         </td>
                         <td>
                           <div class="input-group input-group-sm">
-                            <input 
-                              type="number" 
-                              v-model.number="book.discountPercentage"
-                              class="form-control form-control-sm"
-                              min="0"
-                              max="100"
-                              @change="updateBook(book)"
-                            >
+                            <input type="number" v-model.number="book.discountPercentage"
+                              class="form-control form-control-sm" min="0" max="100" @change="updateBook(book)">
                             <span class="input-group-text">%</span>
                           </div>
                         </td>
@@ -129,7 +108,7 @@
             <div class="card shadow-sm">
               <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h2 class="card-title mb-0 fw-bold text-primary">Gestión de Eventos</h2>
-                <button class="btn btn-success" @click="showAddEventModal">
+                <button class="btn btn-primary" @click="showAddEventModal">
                   <i class="bi bi-calendar-plus-fill me-2"></i>Añadir Evento
                 </button>
               </div>
@@ -139,6 +118,7 @@
                     <thead class="table-light">
                       <tr>
                         <th>Título</th>
+                        <th>Descripcion</th>
                         <th>Fecha</th>
                         <th>Hora</th>
                         <th>Ubicación</th>
@@ -148,15 +128,16 @@
                     <tbody>
                       <tr v-for="event in events" :key="event.id">
                         <td>{{ event.title }}</td>
+                        <td>{{ event.description }}</td>
                         <td>{{ formatEventDate(event.date) }}</td>
                         <td>{{ event.time }}</td>
                         <td>{{ event.location }}</td>
                         <td>
                           <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-warning" @click="editEvent(event)">
+                            <button class="btn btn-sm btn-outline-warning" @click="editEvent(event)">
                               <i class="bi bi-pencil"></i> Editar
                             </button>
-                            <button class="btn btn-sm btn-danger" @click="deleteEvent(event.id)">
+                            <button class="btn btn-sm btn-outline-danger" @click="deleteEvent(event.id)">
                               <i class="bi bi-trash"></i> Eliminar
                             </button>
                           </div>
@@ -194,14 +175,11 @@
                 <input v-model="newBook.author" type="text" class="form-control custom-input" required>
               </div>
               <div class="mb-4">
-                <label class="form-label fw-bold">Descripción</label>
-                <textarea v-model="newBook.description" class="form-control custom-input" rows="3" required></textarea>
-              </div>
-              <div class="mb-4">
                 <label class="form-label fw-bold">Precio</label>
                 <div class="input-group">
                   <span class="input-group-text custom-input-group">$</span>
-                  <input v-model.number="newBook.price" type="number" step="0.01" class="form-control custom-input" required>
+                  <input v-model.number="newBook.price" type="number" step="0.01" class="form-control custom-input"
+                    required>
                 </div>
               </div>
               <div class="mb-4">
@@ -222,13 +200,14 @@
               </div>
               <div class="mb-4">
                 <label class="form-label fw-bold">Descuento (%)</label>
-                <input v-model.number="newBook.discountPercentage" type="number" min="0" max="100" class="form-control custom-input">
+                <input v-model.number="newBook.discountPercentage" type="number" min="0" max="100"
+                  class="form-control custom-input">
               </div>
               <div v-if="newBook.status === 'upcoming'" class="mb-4">
                 <label class="form-label fw-bold">Fecha de lanzamiento</label>
                 <input v-model="newBook.releaseDate" type="date" class="form-control custom-input" required>
               </div>
-              <div class="text-end">
+              <div class="text-center">
                 <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
                 <button type="submit" class="btn btn-primary">{{ editMode ? 'Actualizar' : 'Guardar' }}</button>
               </div>
@@ -256,8 +235,8 @@
                 <input v-model="newEvent.title" type="text" class="form-control custom-input" required>
               </div>
               <div class="mb-4">
-                <label class="form-label fw-bold">Descripción</label>
-                <textarea v-model="newEvent.description" class="form-control custom-input" rows="3" required></textarea>
+                <label class="form-label fw-bold">Descripcion</label>
+                <textarea v-model="newEvent.description" class="form-control custom-input" rows="4" required></textarea>
               </div>
               <div class="mb-4">
                 <label class="form-label fw-bold">Fecha</label>
@@ -275,9 +254,9 @@
                 <label class="form-label fw-bold">URL de la imagen</label>
                 <input v-model="newEvent.imageUrl" type="url" class="form-control custom-input" required>
               </div>
-              <div class="text-end">
+              <div class="text-center">
                 <button type="button" class="btn btn-outline-secondary me-2" data-bs-dismiss="modal">Cancelar</button>
-                <button type="submit" class="btn btn-success">{{ editEventMode ? 'Actualizar' : 'Guardar' }}</button>
+                <button type="submit" class="btn btn-primary">{{ editEventMode ? 'Actualizar' : 'Guardar' }}</button>
               </div>
             </form>
           </div>
@@ -307,7 +286,6 @@ export default {
       newBook: {
         title: '',
         author: '',
-        description: '',
         stock: 0,
         price: 0,
         status: 'available',
@@ -391,10 +369,10 @@ export default {
         if (book.discountPercentage > 0) {
           book.discountedPrice = book.price * (1 - book.discountPercentage / 100)
         }
-        
+
         const bookData = { ...book }
         delete bookData.id // Removemos el id ya que es la referencia del documento
-        
+
         await updateDoc(bookRef, bookData)
         console.log('Libro actualizado exitosamente')
       } catch (error) {
@@ -463,7 +441,6 @@ export default {
       this.editEventMode = false;
       this.newEvent = {
         title: '',
-        description: '',
         date: '',
         time: '',
         location: '',
@@ -476,7 +453,6 @@ export default {
       this.newEvent = {
         id: event.id,
         title: event.title,
-        description: event.description,
         date: event.date instanceof Date ? event.date.toISOString().split('T')[0] : event.date,
         time: event.time,
         location: event.location,
@@ -749,15 +725,25 @@ export default {
   color: var(--text-primary);
 }
 
+.modal {
+  margin: 0 auto;
+  justify-content: center;
+}
+
 .modal-content {
   background: var(--secondary-bg);
   border: 2px solid var(--glass-border);
   color: var(--text-primary);
+  backdrop-filter: blur(10px);
+  min-width: 600px;
+  max-height: 80%;
+  overflow: auto;
 }
 
 .modal-header {
   background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(114, 9, 183, 0.1)) !important;
   border-bottom: 2px solid var(--glass-border);
+  margin-bottom: 12px;
 }
 
 .modal-title {
@@ -766,10 +752,6 @@ export default {
 
 .btn-close {
   filter: invert(1);
-}
-
-.modal-content {
-  backdrop-filter: blur(10px);
 }
 
 .modal-header {

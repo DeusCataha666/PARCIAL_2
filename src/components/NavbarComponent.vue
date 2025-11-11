@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <div class="logo" >
+        <div class="logo">
           <span class="logo-part">NEXUS</span>
           <span class="logo-part">LIBRARY</span>
         </div>
@@ -28,10 +28,14 @@
               <!-- Botón de carrito (solo para usuarios no admin) -->
               <button v-if="!isAdmin" class="btn btn-light position-relative" @click="showCart">
                 <i class="bi bi-cart"></i> Carrito
-                <span v-if="cartCount > 0" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                <span v-if="cartCount > 0" class="position-relativa translate-middle badge rounded-pill bg-danger "
+                  style=""
+                  >
                   {{ cartCount }}
                 </span>
               </button>
+
+
 
               <!-- Botón de perfil (solo para usuarios no admin) -->
               <button v-if="!isAdmin" class="btn btn-light" @click="showProfile">
@@ -55,7 +59,7 @@
       <button class="profile-modal-close" @click="closeProfileModal">
         <i class="bi bi-x-lg"></i>
       </button>
-      
+
       <div class="profile-modal-header">
         <div class="profile-avatar">
           <i class="bi bi-person-circle"></i>
@@ -146,7 +150,7 @@ export default {
 
     // Cargar contadores del localStorage
     this.updateCounters();
-    
+
     // Escuchar cambios en el carrito y favoritos
     window.addEventListener('storage', this.updateCounters);
     this.intervalId = setInterval(this.updateCounters, 1000);
