@@ -1,3 +1,4 @@
+
 # 📚 PARCIAL 2 - Sistema de Gestión de Libros
 
 
@@ -979,3 +980,4 @@ export default {
 ```
 
 --- 
+
