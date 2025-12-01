@@ -771,7 +771,6 @@ export default {
   border: 1px solid var(--glass-border);
   color: #fff;
   font-size: 1rem;
-  padding: 0.75rem 1rem;
   transition: all 0.3s ease;
 }
 
@@ -908,7 +907,6 @@ export default {
 }
 
 .btn {
-  padding: 0.5rem 1.5rem;
   font-weight: 500;
   letter-spacing: 0.5px;
   transition: all 0.3s ease;
