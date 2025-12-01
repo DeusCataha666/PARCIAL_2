@@ -36,7 +36,7 @@
       <div class="conta py-4">
         <div class="row">
           <!-- Gestión de Libros -->
-          <div class="col-12 mb-4">
+          <div class="col-12 ">
             <div class="card shadow-sm">
               <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h2 class="card-title mb-0 fw-bold text-primary">Gestión de Stock</h2>
@@ -814,7 +814,7 @@ export default {
 
 .table td {
   color: #4CC9F0;
-  padding: 1rem;
+  padding: 0.5rem;
   vertical-align: middle;
   font-weight: 500;
   text-shadow: 0 0 10px rgba(76, 201, 240, 0.3);
@@ -895,6 +895,10 @@ export default {
   background: rgba(25, 45, 90, 0.7);
   border-color: var(--accent-color);
   box-shadow: 0 0 10px rgba(76, 201, 240, 0.2);
+}
+
+.table tbody tr td {
+  font-size: 14px;
 }
 
 /* Animaciones y efectos hover */
