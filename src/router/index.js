@@ -10,23 +10,23 @@ import AdminPanelView from "../views/AdminPanelView.vue";
 const routes = [
   { 
     path: "/", 
+    name: "Dashboard",
     component: DashboardView 
-    // Sin meta: requiresAuth para que sea accesible para todos
+    // Página pública, accesible sin login
   },
-  { path: "/login", component: LoginView },
-  { path: "/registro", component: RegisterView },
+  { path: "/login", name: "Login", component: LoginView },
+  { path: "/registro", name: "Register", component: RegisterView },
   { 
     path: "/productos", 
+    name: "ProductsView", 
     component: ProductsView, 
     meta: { requiresAuth: true } 
   },
   { 
     path: "/admin", 
+    name: "AdminPanel", 
     component: AdminPanelView, 
-    meta: { 
-      requiresAuth: true,
-      requiresAdmin: true 
-    } 
+    meta: { requiresAuth: true, requiresAdmin: true } 
   },
 ];
 
@@ -36,18 +36,16 @@ const router = createRouter({
 });
 
 // Protección global de rutas
-router.beforeEach(async (to, from, next) => {
+router.beforeEach((to, from, next) => {
   const user = auth.currentUser;
-  
-  // Verificar si el usuario es admin
   const isAdmin = user && user.email === "admin@nexuslibrary.com";
 
   // Si va al login y ya está autenticado
-  if (to.path === '/login' && user) {
+  if (to.path === "/login" && user) {
     if (isAdmin) {
-      next('/admin');
+      next("/admin");
     } else {
-      next('/productos');
+      next("/productos");
     }
     return;
   }
@@ -70,20 +68,18 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  // Si va a la ruta principal y hay un usuario autenticado
-  if (to.path === '/' && user) {
+  // Si va a la ruta principal "/" y hay un usuario autenticado
+  if (to.path === "/" && user) {
     if (isAdmin) {
-      next('/admin');
+      next("/admin");
     } else {
-      next('/productos');
+      next("/productos");
     }
     return;
   }
 
+  // En cualquier otro caso, continuar normalmente
   next();
 });
-
-
-
 
 export default router;
