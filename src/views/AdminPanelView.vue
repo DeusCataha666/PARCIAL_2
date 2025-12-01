@@ -593,7 +593,7 @@ export default {
 }
 
 .form-control-sm {
-  width: 80px;
+  width: auto;
   background: var(--glass-effect);
   border: 1px solid var(--glass-border);
   color: var(--text-primary);
@@ -770,7 +770,7 @@ export default {
   background: var(--glass-effect);
   border: 1px solid var(--glass-border);
   color: #fff;
-  font-size: 1rem;
+  font-size: 14px;
   transition: all 0.3s ease;
 }
 
