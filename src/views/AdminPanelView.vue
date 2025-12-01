@@ -57,37 +57,22 @@
                     </thead>
                     <tbody>
                       <tr v-for="book in books" :key="book.id">
-                        <td class="text-center"><span class="firestore-id">{{ book.id }}</span></td>
+                        <td class="text-center"> <span class="firestore-id">{{ book.id.substring(0, 8) }}</span> </td>
                         <td class="text-center">{{ book.title }}</td>
                         <td class="text-center">{{ book.author }}</td>
                         <td class="text-center">
-                          <input 
-                            type="number" 
-                            v-model.number="book.stock"
-                            class="form-control form-control-sm"
-                            min="0"
-                            @change="updateStock(book)"
-                          >
+                          <input type="number" v-model.number="book.stock" class="form-control form-control-sm" min="0"
+                            @change="updateStock(book)">
                         </td>
                         <td>
                           <div class="input-group input-group-sm">
                             <span class="input-group-text">$</span>
-                            <input 
-                              type="number" 
-                              v-model.number="book.price"
-                              class="form-control form-control-sm"
-                              min="0"
-                              step="0.01"
-                              @change="updateBook(book)"
-                            >
+                            <input type="number" v-model.number="book.price" class="form-control form-control-sm"
+                              min="0" step="0.01" @change="updateBook(book)">
                           </div>
                         </td>
                         <td>
-                          <select 
-                            v-model="book.status" 
-                            class="form-select form-select-sm"
-                            @change="updateBook(book)"
-                          >
+                          <select v-model="book.status" class="form-select form-select-sm" @change="updateBook(book)">
                             <option value="available">Disponible</option>
                             <option value="upcoming">Próximamente</option>
                             <option value="outOfStock">Agotado</option>
@@ -95,14 +80,8 @@
                         </td>
                         <td>
                           <div class="input-group input-group-sm">
-                            <input 
-                              type="number" 
-                              v-model.number="book.discountPercentage"
-                              class="form-control form-control-sm"
-                              min="0"
-                              max="100"
-                              @change="updateBook(book)"
-                            >
+                            <input type="number" v-model.number="book.discountPercentage"
+                              class="form-control form-control-sm" min="0" max="100" @change="updateBook(book)">
                             <span class="input-group-text">%</span>
                           </div>
                         </td>
@@ -129,7 +108,7 @@
             <div class="card shadow-sm">
               <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
                 <h2 class="card-title mb-0 fw-bold text-primary">Gestión de Eventos</h2>
-                <button class="btn btn-success" @click="showAddEventModal">
+                <button class="btn btn-primary" @click="showAddEventModal">
                   <i class="bi bi-calendar-plus-fill me-2"></i>Añadir Evento
                 </button>
               </div>
@@ -153,10 +132,10 @@
                         <td>{{ event.location }}</td>
                         <td>
                           <div class="d-flex gap-2">
-                            <button class="btn btn-sm btn-warning" @click="editEvent(event)">
+                            <button class="btn btn-sm btn-outline-warning" @click="editEvent(event)">
                               <i class="bi bi-pencil"></i> Editar
                             </button>
-                            <button class="btn btn-sm btn-danger" @click="deleteEvent(event.id)">
+                            <button class="btn btn-sm btn-outline-danger" @click="deleteEvent(event.id)">
                               <i class="bi bi-trash"></i> Eliminar
                             </button>
                           </div>
@@ -201,7 +180,8 @@
                 <label class="form-label fw-bold">Precio</label>
                 <div class="input-group">
                   <span class="input-group-text custom-input-group">$</span>
-                  <input v-model.number="newBook.price" type="number" step="0.01" class="form-control custom-input" required>
+                  <input v-model.number="newBook.price" type="number" step="0.01" class="form-control custom-input"
+                    required>
                 </div>
               </div>
               <div class="mb-4">
@@ -222,7 +202,8 @@
               </div>
               <div class="mb-4">
                 <label class="form-label fw-bold">Descuento (%)</label>
-                <input v-model.number="newBook.discountPercentage" type="number" min="0" max="100" class="form-control custom-input">
+                <input v-model.number="newBook.discountPercentage" type="number" min="0" max="100"
+                  class="form-control custom-input">
               </div>
               <div v-if="newBook.status === 'upcoming'" class="mb-4">
                 <label class="form-label fw-bold">Fecha de lanzamiento</label>
@@ -391,10 +372,10 @@ export default {
         if (book.discountPercentage > 0) {
           book.discountedPrice = book.price * (1 - book.discountPercentage / 100)
         }
-        
+
         const bookData = { ...book }
         delete bookData.id // Removemos el id ya que es la referencia del documento
-        
+
         await updateDoc(bookRef, bookData)
         console.log('Libro actualizado exitosamente')
       } catch (error) {
