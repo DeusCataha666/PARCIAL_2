@@ -18,7 +18,7 @@
             </template>
 
             <template v-else>
-              <router-link v-if="isAdmin" to="/admin" class="btn btn-primary">
+              <router-link v-if="isAdmin" to="/admin" class="btn btn-light">
                 <i class="bi bi-gear-fill"></i> Panel Admin
               </router-link>
 
