@@ -4,7 +4,7 @@
       <!-- Barra de navegación admin -->
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
-          <router-link class="navbar-brand fw-bold" to="/admin">
+          <router-link class="navbar-brand text-warning fw-bold" to="/admin">
             <i class="bi bi-shield-lock"></i> Panel de Administración
           </router-link>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#adminNavbar">
@@ -16,12 +16,16 @@
             <ul class="navbar-nav">
               <li class="nav-item me-3">
                 <router-link class="nav-link text-white" to="/productos">
-                  <i class="bi bi-house-door"></i> Inicio
+                  <button class="btn btn-primary">
+                    <i class="bi bi-house-door"></i> Inicio
+                  </button>
                 </router-link>
               </li>
               <li class="nav-item">
                 <a class="nav-link text-white" href="#" @click.prevent="cerrarSesion">
-                  <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                  <button class="btn btn-danger">
+                    <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
+                  </button>
                 </a>
               </li>
             </ul>
@@ -540,11 +544,6 @@ export default {
   background: var(--glass-effect) !important;
   border-bottom: 2px solid var(--glass-border);
   backdrop-filter: blur(10px);
-}
-
-.navbar-brand,
-.nav-link {
-  color: var(--text-primary) !important;
 }
 
 .conta {
