@@ -84,7 +84,7 @@ export default {
           this.password
         );
 
-        // Guarda el nombre del usuario en su perfil de Firebase
+        
         await updateProfile(userCredential.user, {
           displayName: this.nombre,
         });
@@ -94,7 +94,7 @@ export default {
         this.email = "";
         this.password = "";
 
-        // Redirigir al login después de unos segundos
+        
         setTimeout(() => this.$router.push("/login"), 1500);
       } catch (err) {
         console.error(err);
@@ -111,11 +111,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.register-container {
-  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-}
-.card {
-  border-radius: 15px;
-}
-</style>
+<style scoped src="../assets/estilosCss/register-view.css"></style>

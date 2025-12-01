@@ -12,7 +12,6 @@ const routes = [
     path: "/", 
     name: "Dashboard",
     component: DashboardView 
-    // Página pública, accesible sin login
   },
   { path: "/login", name: "Login", component: LoginView },
   { path: "/registro", name: "Register", component: RegisterView },
@@ -35,12 +34,12 @@ const router = createRouter({
   routes,
 });
 
-// Protección global de rutas
+ 
 router.beforeEach((to, from, next) => {
   const user = auth.currentUser;
   const isAdmin = user && user.email === "admin@nexuslibrary.com";
 
-  // Si va al login y ya está autenticado
+  
   if (to.path === "/login" && user) {
     if (isAdmin) {
       next("/admin");
@@ -50,13 +49,13 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  // Si la ruta requiere autenticación y no hay usuario
+  
   if (to.meta.requiresAuth && !user) {
     next("/login");
     return;
   }
 
-  // Si la ruta requiere privilegios de admin
+  
   if (to.meta.requiresAdmin) {
     if (!user) {
       next("/login");
@@ -68,7 +67,7 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  // Si va a la ruta principal "/" y hay un usuario autenticado
+  
   if (to.path === "/" && user) {
     if (isAdmin) {
       next("/admin");
@@ -78,7 +77,7 @@ router.beforeEach((to, from, next) => {
     return;
   }
 
-  // En cualquier otro caso, continuar normalmente
+  
   next();
 });
 

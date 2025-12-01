@@ -1,7 +1,7 @@
 <template>
   <div class="admin-panel d-flex">
     <div class="main-content flex-grow-1">
-      <!-- Barra de navegación admin -->
+      
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
           <router-link class="navbar-brand text-warning fw-bold" to="/admin">
@@ -35,7 +35,7 @@
 
       <div class="conta py-4">
         <div class="row">
-          <!-- Gestión de Libros -->
+          
           <div class="col-12 ">
             <div class="card shadow-sm">
               <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -107,7 +107,7 @@
             </div>
           </div>
 
-          <!-- Gestión de Eventos -->
+          
           <div class="col-12">
             <div class="card shadow-sm">
               <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -155,7 +155,7 @@
       </div>
     </div>
 
-    <!-- Modal para añadir/editar libro -->
+    
     <div class="modal fade" id="bookModal" tabindex="-1" ref="bookModal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -223,7 +223,7 @@
       </div>
     </div>
 
-    <!-- Modal para añadir/editar evento -->
+    
     <div class="modal fade" id="eventModal" tabindex="-1" ref="eventModal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -362,9 +362,9 @@ export default {
     },
     async updateStock(book) {
       try {
-        // Actualizar stock en Firebase
+        
         console.log(`Actualizando stock: ${book.id} -> ${book.stock}`)
-        // await updateDoc(bookRef, { stock: book.stock })
+        
       } catch (error) {
         console.error('Error al actualizar stock:', error)
       }
@@ -372,13 +372,13 @@ export default {
     async updateBook(book) {
       try {
         const bookRef = doc(db, 'books', book.id)
-        // Calcular precio con descuento si aplica
+        
         if (book.discountPercentage > 0) {
           book.discountedPrice = book.price * (1 - book.discountPercentage / 100)
         }
 
         const bookData = { ...book }
-        delete bookData.id // Removemos el id ya que es la referencia del documento
+        delete bookData.id
 
         await updateDoc(bookRef, bookData)
         console.log('Libro actualizado exitosamente')
@@ -416,17 +416,17 @@ export default {
     },
     async saveBook() {
       try {
-        // Validar precio y stock
+        
         if (this.newBook.price < 0 || this.newBook.stock < 0) {
           alert('El precio y el stock no pueden ser negativos')
           return
         }
 
         if (this.newBook.id) {
-          // Actualizar libro existente
+          
           await this.updateBook(this.newBook)
         } else {
-          // Crear nuevo libro
+          
           const newBookData = {
             ...this.newBook,
             createdAt: new Date().toISOString()
@@ -436,7 +436,7 @@ export default {
           console.log('Nuevo libro creado exitosamente')
         }
 
-        // Cerrar modal y recargar lista
+        
         this.modal.hide()
         await this.loadBooks()
       } catch (error) {
@@ -488,21 +488,21 @@ export default {
           ...this.newEvent,
           createdAt: new Date().toISOString()
         }
-        delete eventData.id // Removemos el id si existe
+        delete eventData.id
 
         if (this.newEvent.id) {
-          // Actualizar evento existente
+          
           const eventRef = doc(db, 'events', this.newEvent.id)
           await updateDoc(eventRef, eventData)
           console.log('Evento actualizado exitosamente')
         } else {
-          // Crear nuevo evento
+          
           const eventsCollection = collection(db, 'events')
           await addDoc(eventsCollection, eventData)
           console.log('Nuevo evento creado exitosamente')
         }
 
-        // Cerrar modal y recargar lista
+        
         this.eventModal.hide()
         await this.loadEvents()
       } catch (error) {
@@ -528,395 +528,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.admin-panel {
-  background: linear-gradient(135deg, var(--primary-bg) 0%, #0d1b2a 50%, var(--primary-bg) 100%);
-  background-attachment: fixed;
-  min-height: 100vh;
-  color: var(--text-primary);
-}
-
-.main-content {
-  background: transparent;
-}
-
-.navbar {
-  background: var(--glass-effect) !important;
-  border-bottom: 2px solid var(--glass-border);
-  backdrop-filter: blur(10px);
-}
-
-.conta {
-  min-width: 1250px;
-  padding: 2rem 1rem;
-}
-
-.card {
-  background: var(--glass-effect);
-  border: 2px solid var(--glass-border);
-  border-radius: 12px;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.card:hover {
-  box-shadow: 0 8px 25px rgba(76, 201, 240, 0.2);
-  border-color: var(--accent-color);
-}
-
-.card-header {
-  background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(114, 9, 183, 0.1)) !important;
-  border-bottom: 2px solid var(--glass-border);
-}
-
-.card-title {
-  color: var(--accent-color);
-  font-family: 'Orbitron', sans-serif;
-}
-
-.table {
-  color: var(--text-primary);
-}
-
-.table th {
-  font-weight: 600;
-  background: rgba(255, 255, 255, 0.05);
-  border-color: var(--glass-border);
-  color: var(--text-primary);
-}
-
-.table td {
-  background: rgba(255, 255, 255, 0.03);
-  border-color: var(--glass-border);
-  color: var(--text-primary);
-}
-
-.form-control-sm {
-  width: auto;
-  background: var(--glass-effect);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-}
-
-.form-control-sm:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 0.2rem rgba(76, 201, 240, 0.25);
-  color: var(--text-primary);
-}
-
-.form-select {
-  background: var(--glass-effect);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-}
-
-.form-select:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 0.2rem rgba(76, 201, 240, 0.25);
-  color: var(--text-primary);
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, var(--accent-color), var(--hover-btn));
-  border: none;
-  color: var(--primary-bg);
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(76, 201, 240, 0.5);
-  background: linear-gradient(135deg, var(--hover-btn), var(--accent-color));
-}
-
-.btn-success {
-  background: linear-gradient(135deg, var(--success-color), #22c55e);
-  border: none;
-  color: white;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(74, 222, 128, 0.3);
-}
-
-.btn-success:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(74, 222, 128, 0.5);
-  background: linear-gradient(135deg, #22c55e, var(--success-color));
-}
-
-.btn-warning {
-  background: linear-gradient(135deg, var(--warning-color), #f59e0b);
-  border: none;
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.btn-warning:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(245, 158, 11, 0.3);
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, var(--error-color), #dc2626);
-  border: none;
-  color: white;
-  transition: all 0.3s ease;
-}
-
-.btn-danger:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(248, 113, 113, 0.3);
-}
-
-.btn-outline-warning {
-  color: var(--accent-color);
-  border-color: var(--accent-color);
-  background: transparent;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-warning:hover {
-  background: var(--accent-color);
-  color: var(--primary-bg);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
-}
-
-.btn-outline-danger {
-  color: var(--error-color);
-  border-color: var(--error-color);
-  background: transparent;
-  transition: all 0.3s ease;
-}
-
-.btn-outline-danger:hover {
-  background: var(--error-color);
-  color: white;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(248, 113, 113, 0.3);
-}
-
-.table-hover tbody tr:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--accent-color);
-}
-
-.gap-2 {
-  gap: 0.5rem !important;
-}
-
-.custom-input,
-.custom-select {
-  background: var(--glass-effect);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-}
-
-.custom-input:focus,
-.custom-select:focus {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 0.2rem rgba(76, 201, 240, 0.25);
-  color: var(--text-primary);
-}
-
-.custom-input-group {
-  background: var(--glass-effect);
-  border: 1px solid var(--glass-border);
-  color: var(--text-primary);
-}
-
-.modal-content {
-  background: var(--secondary-bg);
-  border: 2px solid var(--glass-border);
-  color: var(--text-primary);
-}
-
-.modal-header {
-  background: linear-gradient(135deg, rgba(76, 201, 240, 0.1), rgba(114, 9, 183, 0.1)) !important;
-  border-bottom: 2px solid var(--glass-border);
-}
-
-.modal-title {
-  color: var(--text-primary);
-}
-
-.btn-close {
-  filter: invert(1);
-}
-
-.modal-content {
-  backdrop-filter: blur(10px);
-}
-
-.modal-header {
-  border-bottom: 2px solid var(--glass-border);
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.form-label {
-  color: #e9ecef;
-  font-size: 1rem;
-  margin-bottom: 0.5rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-}
-
-.form-control,
-.form-select {
-  background: var(--glass-effect);
-  border: 1px solid var(--glass-border);
-  color: #fff;
-  font-size: 14px;
-  transition: all 0.3s ease;
-}
-
-.form-control::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
-.form-control:focus,
-.form-select:focus {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 0 0.2rem rgba(76, 201, 240, 0.25);
-  color: #fff;
-}
-
-.input-group-text {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid var(--glass-border);
-  color: #ff0000;
-}
-
-/* Estilos para la sección de gestión */
-.card-header h2 {
-  color: #fff;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  font-size: 1.5rem;
-}
-
-.table {
-  margin-top: 1rem;
-}
-
-.table th {
-  color: var(--accent-color);
-  text-transform: uppercase;
-  font-size: 0.9rem;
-  letter-spacing: 0.5px;
-  padding: 1rem;
-}
-
-.table td {
-  color: #4CC9F0;
-  padding: 0.5rem;
-  vertical-align: middle;
-  font-weight: 500;
-  text-shadow: 0 0 10px rgba(76, 201, 240, 0.3);
-}
-
-.table td small {
-  color: rgba(76, 201, 240, 0.7);
-}
-
-/* Estilo específico para los datos de Firestore */
-.table tbody tr td:not(:has(input)):not(:has(select)):not(:has(button)) {
-  color: #4CC9F0;
-  font-family: 'Courier New', monospace;
-  letter-spacing: 0.5px;
-}
-
-/* Estilos para el formulario modal */
-.custom-form {
-  padding: 1.5rem;
-  background: linear-gradient(135deg, rgba(29, 53, 87, 0.95) 0%, rgba(32, 58, 96, 0.95) 100%);
-  border-radius: 12px;
-}
-
-.custom-input,
-.custom-select {
-  background: rgba(20, 39, 78, 0.6);
-  border: 1px solid rgba(76, 201, 240, 0.2);
-  color: #4CC9F0;
-  border-radius: 8px;
-  font-weight: 500;
-}
-
-.custom-input:focus,
-.custom-select:focus {
-  background: rgba(25, 45, 90, 0.7);
-  border-color: var(--accent-color);
-  color: #4CC9F0;
-  box-shadow: 0 0 0 0.2rem rgba(76, 201, 240, 0.15);
-}
-
-.custom-select option {
-  background: #1d3557;
-  color: #4CC9F0;
-}
-
-.custom-input-group {
-  /* background: rgba(20, 39, 78, 0.6); */
-  border: 1px solid rgba(76, 201, 240, 0.2);
-  color: #4CC9F0;
-}
-
-/* Estilos para las celdas de la tabla */
-.table td .form-control-sm {
-  border: 1px solid rgba(76, 201, 240, 0.2);
-  color: #4CC9F0;
-  transition: all 0.3s ease;
-  font-weight: 500;
-}
-
-.table td .form-control-sm:focus {
-  background: rgba(25, 45, 90, 0.7);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 10px rgba(76, 201, 240, 0.2);
-}
-
-.table td .input-group-sm .input-group-text {
-  border: 1px solid rgba(76, 201, 240, 0.2);
-  color: #4CC9F0;
-}
-
-.table td select.form-select-sm {
-  border: 1px solid rgba(76, 201, 240, 0.2);
-  color: #4CC9F0;
-  font-weight: 500;
-}
-
-.table td select.form-select-sm:focus {
-  background: rgba(25, 45, 90, 0.7);
-  border-color: var(--accent-color);
-  box-shadow: 0 0 10px rgba(76, 201, 240, 0.2);
-}
-
-.table tbody tr td {
-  font-size: 14px;
-}
-
-/* Animaciones y efectos hover */
-.table tbody tr {
-  transition: all 0.3s ease;
-}
-
-.table tbody tr:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-.btn {
-  font-weight: 500;
-  letter-spacing: 0.5px;
-  transition: all 0.3s ease;
-}
-
-.btn:hover {
-  transform: translateY(-2px);
-}
-</style>
+<style scoped src="../assets/estilosCss/admin-panel.css"></style>

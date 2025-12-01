@@ -29,7 +29,7 @@
                 </span>
               </button>
 
-              <!-- Botón de perfil (solo para usuarios no admin) -->
+              
               <button v-if="!isAdmin" class="btn btn-light" @click="showProfile">
                 <i class="bi bi-person-circle"></i> Mi Perfil
               </button>
@@ -40,7 +40,7 @@
     </nav>
   </header>
 
-  <!-- Modal de Perfil -->
+  
   <div class="profile-modal-overlay" :class="{ show: showProfileModal }" @click.self="closeProfileModal">
     <div class="profile-modal-content">
       <button class="profile-modal-close" @click="closeProfileModal">
@@ -104,7 +104,7 @@
     </div>
   </div>
 
-  <!-- Modal de Favoritos -->
+  
   <div class="profile-modal-overlay centered-overlay" :class="{ show: showFavoritesModal }" @click.self="closeFavoritesModal">
     <div class="profile-modal-content favorites-modal">
       <button class="profile-modal-close" @click="closeFavoritesModal">
@@ -145,7 +145,7 @@
     </div>
   </div>
 
-  <!-- Modal de Carrito -->
+  
   <div class="profile-modal-overlay centered-overlay" :class="{ show: showCartModalFromProfile }" @click.self="closeCartModalFromProfile">
     <div class="profile-modal-content cart-modal">
       <button class="profile-modal-close" @click="closeCartModalFromProfile">
@@ -231,7 +231,7 @@ export default {
     }
   },
   mounted() {
-    // Observar cambios en el estado de autenticación
+    
     onAuthStateChanged(auth, (user) => {
       this.isAuthenticated = !!user;
       if (user) {
@@ -243,10 +243,10 @@ export default {
       }
     });
 
-    // Cargar contadores del localStorage
+    
     this.updateCounters();
     
-    // Escuchar cambios en el carrito y favoritos
+    
     window.addEventListener('storage', this.updateCounters);
     this.intervalId = setInterval(this.updateCounters, 1000);
   },
@@ -273,7 +273,7 @@ export default {
       this.showProfileModal = false;
     },
     showCart() {
-      // Emitir evento para mostrar el carrito en ProductsView
+      
       window.dispatchEvent(new CustomEvent('show-cart-modal'));
     },
     updateCounters() {

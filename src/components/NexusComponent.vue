@@ -97,16 +97,16 @@
       </div>
     </section>
 
-    <!-- Modal de Colección -->
+    
     <div class="modal-overlay" :class="{ show: showCollectionModal }" @click.self="closeModal"
       v-if="showCollectionModal">
       <div class="modal-content">
-        <button class="modal-close" @click="closeModal">
-          <i class="bi bi-x-lg"></i>
-        </button>
 
         <div class="modal-header">
           <h2><i class="bi bi-collection"></i> Libros en Oferta</h2>
+          <button class="modal-close" @click="closeModal">
+            <i class="bi bi-x-circle text-danger"></i>
+          </button>
         </div>
 
         <div class="modal-body">
@@ -138,19 +138,22 @@
               </div>
             </div>
           </div>
+          <div class="modal-footer">
+            <button class="btn secondary-btn mb-3" @click="redirectToProductsView">
+              <i class="bi bi-box-arrow-in-right"></i> conoce más
+            </button>
+          </div>
         </div>
       </div>
     </div>
 
-    <!-- Modal de Eventos -->
     <div class="modal-overlay" :class="{ show: showEventsModal }" @click.self="closeModal" v-if="showEventsModal">
       <div class="modal-content">
-        <button class="modal-close" @click="closeModal">
-          <i class="bi bi-x-lg"></i>
-        </button>
-
         <div class="modal-header">
           <h2><i class="bi bi-calendar-check"></i> Próximos Eventos</h2>
+          <button class="modal-close" @click="closeModal">
+            <i class="bi bi-x-circle text-danger"></i>
+          </button>
         </div>
 
         <div class="modal-body">
@@ -167,7 +170,10 @@
           <div v-else class="row g-3">
             <div v-for="event in events" :key="event.id" class="col-12">
               <div class="event-card" @click="showEventDetails(event)">
-                <div class="event-date">{{ formatEventDate(event.date) }}</div>
+                <div class="event-image">
+                  <img :src="event.imageUrl" alt="Event Image">
+                  <div class="event-date">{{ formatEventDate(event.date) }}</div>
+                </div>
                 <div class="event-details">
                   <h5 class="event-title">{{ event.title }}</h5>
                   <p class="event-location">
@@ -177,21 +183,26 @@
                 </div>
               </div>
             </div>
+          </div> 
+          <div class="modal-footer">
+            <button class="btn secondary-btn mb-3" @click="redirectToEventsView">
+              <i class="bi bi-box-arrow-in-right"></i> conoce más
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Modal de membresía -->
+    
     <div class="modal-overlay" :class="{ show: showMembershipModal }" @click.self="closeModal"
       v-if="showMembershipModal">
       <div class="modal-content">
-        <button class="modal-close" @click="closeModal">
-          <i class="bi bi-x-lg"></i>
-        </button>
 
         <div class="modal-header">
           <h2><i class="bi bi-person-vcard"></i> Membresía <span class="premium">VIP</span></h2>
+          <button class="modal-close" @click="closeModal">
+            <i class="bi bi-x-circle text-danger"></i>
+          </button>
         </div>
 
         <div class="membership-modal-body">
@@ -206,7 +217,11 @@
               <ul class="plan-features">
                 <li><i class="bi bi-check-circle-fill"></i> Eventos exclusivos VIP</li>
                 <li><i class="bi bi-check-circle-fill"></i> Descuentos del 30% en libros físicos</li>
-                <li><i class="bi bi-check-circle-fill"></i> Acceso anticipado a nuevos lanzamientos</li>              </ul>
+                <li><i class="bi bi-check-circle-fill"></i> Acceso anticipado a nuevos lanzamientos</li>              
+              </ul>
+              <button class="btn primary-btn" @click="redirectToMembershipView">
+                <i class="bi bi-cart-plus"></i> ¡comprarlo ahora!
+              </button>
             </div>
             <div class="plan-card">
               <div class="plan-badge">Economico</div>
@@ -220,6 +235,9 @@
                 <li><i class="bi bi-check-circle-fill"></i> Descuentos del 15% en libros físicos</li>
                 <li><i class="bi bi-check-circle-fill"></i> Soporte prioritario</li>
               </ul>
+              <button class="btn primary-btn" @click="redirectToMembershipView">
+                <i class="bi bi-cart-plus"></i> ¡comprarlo ahora!
+              </button>
             </div>
           </div>
         </div>
@@ -234,7 +252,7 @@ import { onMounted, reactive, ref } from 'vue';
 import { db } from "../firebase/config";
 import { collection, getDocs } from "firebase/firestore";
 
-// Estados para los modales
+ 
 const showCollectionModal = ref(false);
 const showEventsModal = ref(false);
 const showMembershipModal = ref(false);
@@ -242,7 +260,7 @@ const discountedBooks = ref([]);
 const events = ref([]);
 const loading = ref(false);
 
-// Datos del formulario
+ 
 const formData = reactive({
   nombre: '',
   email: '',
@@ -250,7 +268,7 @@ const formData = reactive({
   mensaje: ''
 });
 
-// Cargar libros en oferta desde Firebase
+ 
 const loadDiscountedBooks = async () => {
   loading.value = true;
   try {
@@ -262,7 +280,7 @@ const loadDiscountedBooks = async () => {
         const data = doc.data();
         const bookData = { id: doc.id, ...data };
 
-        // Calcular precio con descuento
+        
         if (bookData.discountPercentage && bookData.discountPercentage > 0) {
           bookData.discountedPrice = parseFloat(
             (bookData.price * (1 - bookData.discountPercentage / 100)).toFixed(2)
@@ -279,7 +297,7 @@ const loadDiscountedBooks = async () => {
   }
 };
 
-// Cargar eventos desde Firebase
+ 
 const loadEvents = async () => {
   loading.value = true;
   try {
@@ -290,7 +308,7 @@ const loadEvents = async () => {
       const data = doc.data();
       const eventData = { id: doc.id, ...data };
 
-      // Convertir Timestamp de Firestore a Date
+      
       if (eventData.date && eventData.date.toDate) {
         eventData.date = eventData.date.toDate();
       } else if (eventData.date && typeof eventData.date === 'string') {
@@ -307,31 +325,38 @@ const loadEvents = async () => {
   }
 };
 
-// Abrir modal de colección
+ 
 const openCollectionModal = async () => {
   await loadDiscountedBooks();
   showCollectionModal.value = true;
 };
 
-// Abrir modal de eventos
+ 
 const openEventsModal = async () => {
   await loadEvents();
   showEventsModal.value = true;
 };
 
-// Abrir modal de membresía
+ 
 const openMembershipModal = () => {
   showMembershipModal.value = true;
 };
 
-// Cerrar modales
+ 
 const closeModal = () => {
   showCollectionModal.value = false;
   showEventsModal.value = false;
   showMembershipModal.value = false;
 };
 
-// Formatear fecha para eventos
+const redirectToProductsView = () => {
+  window.location.href = '/productos';
+};
+
+const redirectToEventsView = () => {
+  window.location.href = '/productos';
+};
+ 
 const formatEventDate = (date) => {
   if (!date) return 'Fecha no disponible';
   try {
@@ -348,12 +373,15 @@ const formatEventDate = (date) => {
   }
 };
 
-// Redirigir a Discord
+const redirectToMembershipView = () => {
+  window.location.href = '/login';
+};
+ 
 const redirectToDiscord = () => {
   window.location.href = 'https://discord.gg/nexuslibrary';
 };
 
-// Mostrar notificación estilizada
+ 
 const showNotification = (message) => {
   const notification = document.createElement('div');
   notification.className = 'nexus-notification show';
@@ -372,7 +400,7 @@ const showNotification = (message) => {
 };
 
 
-// Manejar submit del formulario
+ 
 const handleSubmit = () => {
   if (!formData.nombre || !formData.email || !formData.telefono || !formData.mensaje) {
     alert('Por favor, completa todos los campos del formulario.');
@@ -398,7 +426,7 @@ const handleSubmit = () => {
   });
 };
 
-// Animaciones
+ 
 const setupScrollAnimations = () => {
   try {
     const observer = new IntersectionObserver((entries, observerInstance) => {

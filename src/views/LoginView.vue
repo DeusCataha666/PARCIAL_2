@@ -74,10 +74,10 @@ export default {
     },
   },
   mounted() {
-    // Si el usuario ya está autenticado, redirigimos directamente a Productos
+    
     this._unsubAuth = onAuthStateChanged(auth, (user) => {
       if (user) {
-        // Redirigir a productos en lugar del dashboard cuando hay sesión activa
+        
         this.$router.replace('/productos');
       }
     });

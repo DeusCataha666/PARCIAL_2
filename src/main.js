@@ -22,14 +22,12 @@ onAuthStateChanged(auth, (user) => {
   }
 
   if (user) {
-    // Usuario logueado
     if (user.email === "admin@nexuslibrary.com") {
       router.push("/admin");
     } else {
       router.push("/productos");
     }
   } else {
-    // Usuario NO logueado → mostrar Dashboard
     if (router.currentRoute.value.path !== "/") {
       router.push("/");
     }

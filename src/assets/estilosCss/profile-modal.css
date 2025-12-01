@@ -1,4 +1,4 @@
-/* Variables para el modal del perfil */
+ 
 :root {
     --profile-modal-bg: rgba(10, 25, 47, 0.95);
     --profile-card-bg: rgba(23, 42, 69, 0.9);
@@ -10,7 +10,7 @@
     --profile-success: #4ade80;
 }
 
-/* Overlay del modal del perfil */
+ 
 .profile-modal-overlay {
     position: fixed;
     top: 0;
@@ -29,7 +29,7 @@
     transition: all 0.3s ease;
 }
 
-/* Variantes centradas para modales (favoritos / carrito) */
+ 
 .profile-modal-overlay.centered-overlay {
     justify-content: center;
     align-items: center;
@@ -38,9 +38,9 @@
 }
 
 .profile-modal-overlay.centered-overlay .profile-modal-content {
-    /* evite el comportamiento de slide desde la derecha, usar aparición central */
+    
     transform: translateY(30px) scale(0.98);
-    width: 650px; /* ancho mayor para listas */
+    width: 650px; 
     max-width: 95vw;
     max-height: 85vh;
 }
@@ -49,7 +49,7 @@
     transform: translateY(0) scale(1);
 }
 
-/* Ajustes específicos a favoritos y carrito para que se vean bien centrados */
+ 
 .profile-modal-content.favorites-modal {
     width: 680px;
 }
@@ -63,7 +63,7 @@
     visibility: visible;
 }
 
-/* Contenido del modal del perfil */
+ 
 .profile-modal-content {
     background: var(--profile-card-bg);
     border: 1px solid var(--profile-border);
@@ -83,7 +83,7 @@
     transform: translateX(0);
 }
 
-/* Botón de cerrar */
+ 
 .profile-modal-close {
     position: absolute;
     top: 15px;
@@ -109,7 +109,7 @@
     transform: rotate(90deg);
 }
 
-/* Header del modal */
+ 
 .profile-modal-header {
     text-align: center;
     padding: 2rem 2rem 1rem;
@@ -144,7 +144,7 @@
     font-weight: 500;
 }
 
-/* Cuerpo del modal */
+ 
 .profile-modal-body {
     padding: 1.5rem 2rem;
 }
@@ -171,7 +171,7 @@
     color: var(--profile-accent);
 }
 
-/* Items de información */
+ 
 .profile-info-item {
     display: flex;
     justify-content: space-between;
@@ -198,7 +198,7 @@
     word-break: break-word;
 }
 
-/* Grid de estadísticas */
+ 
 .profile-stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -257,7 +257,7 @@
     font-weight: 500;
 }
 
-/* Footer del modal */
+ 
 .profile-modal-footer {
     padding: 1.5rem 2rem;
     border-top: 1px solid var(--profile-border);
@@ -266,7 +266,7 @@
     justify-content: space-between;
 }
 
-/* Botones del modal */
+ 
 .profile-modal-footer .btn {
     flex: 1;
     padding: 0.75rem 1rem;
@@ -307,7 +307,7 @@
     box-shadow: 0 5px 15px rgba(248, 113, 113, 0.3);
 }
 
-/* Scrollbar personalizada para el modal */
+ 
 .profile-modal-content::-webkit-scrollbar {
     width: 6px;
 }
@@ -326,7 +326,7 @@
     background: #3aa8d8;
 }
 
-/* Responsive */
+ 
 @media (max-width: 768px) {
     .profile-modal-overlay {
         padding: 1rem;
@@ -380,7 +380,7 @@
     }
 }
 
-/* Estilos para cards clickeables */
+ 
 .stat-card.clickable {
     cursor: pointer;
     transition: all 0.3s ease;
@@ -391,7 +391,7 @@
     box-shadow: 0 8px 20px rgba(76, 201, 240, 0.3);
 }
 
-/* Estilos para modal de favoritos */
+ 
 .favorites-list {
     display: flex;
     flex-direction: column;
@@ -479,7 +479,7 @@
     transform: scale(1.1);
 }
 
-/* Estilos para modal de carrito */
+ 
 .cart-items-list {
     display: flex;
     flex-direction: column;

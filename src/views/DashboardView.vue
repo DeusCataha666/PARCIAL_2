@@ -1,6 +1,6 @@
 <template>
   <div class="dashboard d-flex">
-    <!-- Contenido principal -->
+    
     <div class="main-content flex-grow-1">
       <NavbarComponent />
       <NexusComponent />
