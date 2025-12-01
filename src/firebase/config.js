@@ -1,9 +1,7 @@
-// src/firebase/config.js
 import { initializeApp } from "firebase/app";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 
-// ⚠️ Sustituye estos valores por los tuyos reales de firebase-config.js
 const firebaseConfig = {
   apiKey: "AIzaSyCMYhnIGyQw4SyYHDHMcHiU-AGpCnjODEE",
   authDomain: "campushub-fff2f.firebaseapp.com",

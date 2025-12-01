@@ -70,9 +70,13 @@ router.beforeEach(async (to, from, next) => {
     return;
   }
 
-  // Si va a la ruta principal y es admin
-  if (to.path === '/' && isAdmin) {
-    next('/admin');
+  // Si va a la ruta principal y hay un usuario autenticado
+  if (to.path === '/' && user) {
+    if (isAdmin) {
+      next('/admin');
+    } else {
+      next('/productos');
+    }
     return;
   }
 

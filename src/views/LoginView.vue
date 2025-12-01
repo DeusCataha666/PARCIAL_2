@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { auth } from "../firebase/config";
 
 export default {
@@ -72,6 +72,18 @@ export default {
         console.error(err);
       }
     },
+  },
+  mounted() {
+    // Si el usuario ya está autenticado, redirigimos directamente a Productos
+    this._unsubAuth = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // Redirigir a productos en lugar del dashboard cuando hay sesión activa
+        this.$router.replace('/productos');
+      }
+    });
+  },
+  beforeUnmount() {
+    if (this._unsubAuth) this._unsubAuth();
   },
 };
 </script>

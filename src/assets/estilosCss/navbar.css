@@ -9,8 +9,15 @@
     --glass-border: rgba(255, 255, 255, 0.1);
     --success-color: #4ade80;
     --warning-color: #f59e0b;
-    --error-color: #f87171;
+    --error-color: #761717;
     --hover-btn: #3aa8d8;
+}
+
+.bagde{
+  position: relative;  
+  top: -7px;
+  right: -9px;
+  padding: 0 2px;
 }
 
 a.btn{
@@ -155,9 +162,6 @@ a.btn{
 .btn-light {
   background: linear-gradient(135deg, var(--accent-color), var(--hover-btn));
   color: var(--primary-bg);
-  border: none;
-  box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
-  position: relative;
   border-radius: 12px;
   padding: 0.6rem 1rem;
   transition: all 0.3s ease;
@@ -166,7 +170,7 @@ a.btn{
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .btn-light:hover {

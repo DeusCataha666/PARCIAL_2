@@ -21,7 +21,53 @@
         <!-- Sección de libros disponibles -->
         <section v-if="!loading && !error && availableBooks.length > 0" class="mb-5">
           <h2 class="section-title">Libros Disponibles</h2>
-          <div class="row g-4">
+          <!-- Carrusel para pantallas pequeñas -->
+          <div class="books-carousel d-md-none">
+            <div class="books-scroll-container">
+              <div v-for="book in availableBooks" :key="book.id" class="book-card-item">
+                <div class="card h-100">
+                  <div class="card-image-wrapper">
+                    <img 
+                      :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()" 
+                      class="card-img-top" 
+                      :alt="book.title"
+                      @error="handleImageError($event)"
+                    >
+                    <button 
+                      class="favorite-btn" 
+                      @click="toggleFavorite(book)"
+                      :class="{ active: isFavorite(book.id) }"
+                      :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+                    >
+                      <i :class="isFavorite(book.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                    </button>
+                  </div>
+                <div class="card-body d-flex flex-column">
+                  <h5 class="card-title">{{ book.title }}</h5>
+                  <p class="card-text">{{ book.author }}</p>
+                  <p class="card-text card-description">{{ book.description }}</p>
+                  <div class="mt-auto">
+                    <p v-if="!book.discountPercentage" class="card-text fw-bold mb-2">${{ book.price }}</p>
+                    <div v-else class="price-container mb-2">
+                      <span class="original-price">${{ book.price }}</span>
+                      <span class="discounted-price">${{ book.discountedPrice }}</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-outline-info flex-grow-1" @click="showBookDetails(book)">
+                        <i class="bi bi-info-circle"></i> Detalles
+                      </button>
+                      <button class="btn btn-primary flex-grow-1" @click="addToCart(book)">
+                        <i class="bi bi-cart-plus"></i> Añadir
+                      </button>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Grid para pantallas grandes -->
+          <div class="row g-4 d-none d-md-flex">
             <div v-for="book in availableBooks" :key="book.id" class="col-md-4">
               <div class="card h-100">
                 <div class="card-image-wrapper">
@@ -40,18 +86,25 @@
                     <i :class="isFavorite(book.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
                   </button>
                 </div>
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ book.title }}</h5>
                   <p class="card-text">{{ book.author }}</p>
-                  <p class="card-text">{{ book.description }}</p>
-                  <p v-if="!book.discountPercentage" class="card-text fw-bold">${{ book.price }}</p>
-                  <div v-else class="price-container">
-                    <span class="original-price">${{ book.price }}</span>
-                    <span class="discounted-price">${{ book.discountedPrice }}</span>
+                  <p class="card-text card-description">{{ book.description }}</p>
+                  <div class="mt-auto">
+                    <p v-if="!book.discountPercentage" class="card-text fw-bold mb-2">${{ book.price }}</p>
+                    <div v-else class="price-container mb-2">
+                      <span class="original-price">${{ book.price }}</span>
+                      <span class="discounted-price">${{ book.discountedPrice }}</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-outline-info flex-grow-1" @click="showBookDetails(book)">
+                        <i class="bi bi-info-circle"></i> Detalles
+                      </button>
+                      <button class="btn btn-primary flex-grow-1" @click="addToCart(book)">
+                        <i class="bi bi-cart-plus"></i> Añadir
+                      </button>
+                    </div>
                   </div>
-                  <button class="btn btn-primary w-100" @click="addToCart(book)">
-                    Añadir al carrito
-                  </button>
                 </div>
               </div>
             </div>
@@ -61,7 +114,52 @@
         <!-- Sección de próximos lanzamientos -->
         <section v-if="!loading && !error && upcomingBooks.length > 0" class="mb-5">
           <h2 class="section-title">Próximamente</h2>
-          <div class="row g-4">
+          <!-- Carrusel para pantallas pequeñas (Próximamente) -->
+          <div class="books-carousel d-md-none">
+            <div class="books-scroll-container">
+              <div v-for="book in upcomingBooks" :key="book.id" class="book-card-item">
+                <div class="card h-100">
+                  <div class="card-image-wrapper">
+                    <img
+                      :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()"
+                      class="card-img-top"
+                      :alt="book.title"
+                      @error="handleImageError($event)"
+                    >
+                    <button
+                      class="favorite-btn"
+                      @click="toggleFavorite(book)"
+                      :class="{ active: isFavorite(book.id) }"
+                      :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+                    >
+                      <i :class="isFavorite(book.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                    </button>
+                    <div class="coming-soon-badge">Próximamente</div>
+                  </div>
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text">{{ book.author }}</p>
+                    <p class="card-text card-description">{{ book.description }}</p>
+                    <div class="mt-auto">
+                      <p class="card-text mb-2">
+                        <small class="text-muted">Disponible: {{ formatDate(book.releaseDate) }}</small>
+                      </p>
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-outline-info flex-grow-1" @click="showBookDetails(book)">
+                          <i class="bi bi-info-circle"></i> Detalles
+                        </button>
+                        <button class="btn btn-primary notify-btn flex-grow-1" @click="notifyMe(book)">
+                          <i class="bi bi-bell"></i> Notificame
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4 d-none d-md-flex">
             <div v-for="book in upcomingBooks" :key="book.id" class="col-md-4">
               <div class="card h-100">
                 <div class="card-image-wrapper">
@@ -81,16 +179,23 @@
                   </button>
                   <div class="coming-soon-badge">Próximamente</div>
                 </div>
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ book.title }}</h5>
                   <p class="card-text">{{ book.author }}</p>
-                  <p class="card-text">{{ book.description }}</p>
-                  <p class="card-text">
-                    <small class="text-muted">Disponible: {{ formatDate(book.releaseDate) }}</small>
-                  </p>
-                  <button class="btn btn-outline-primary w-100" @click="notifyMe(book)">
-                    Notificarme
-                  </button>
+                  <p class="card-text card-description">{{ book.description }}</p>
+                  <div class="mt-auto">
+                    <p class="card-text mb-2">
+                      <small class="text-muted">Disponible: {{ formatDate(book.releaseDate) }}</small>
+                    </p>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-outline-info detail-btn flex-grow-1" @click="showBookDetails(book)">
+                        <i class="bi bi-info-circle"></i> Detalles
+                      </button>
+                        <button class="btn btn-primary notify-btn flex-grow-1" @click="notifyMe(book)">
+                          <i class="bi bi-bell"></i> Notificame
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -100,7 +205,53 @@
         <!-- Sección de ofertas -->
         <section v-if="!loading && !error && discountedBooks.length > 0" class="mb-5">
           <h2 class="section-title">Ofertas Especiales</h2>
-          <div class="row g-4">
+          <!-- Carrusel para pantallas pequeñas (Ofertas Especiales) -->
+          <div class="books-carousel d-md-none">
+            <div class="books-scroll-container">
+              <div v-for="book in discountedBooks" :key="book.id" class="book-card-item">
+                <div class="card h-100">
+                  <div class="card-image-wrapper">
+                    <img
+                      :src="book.imageUrl && book.imageUrl.trim() !== '' ? book.imageUrl : getPlaceholderImage()"
+                      class="card-img-top"
+                      :alt="book.title"
+                      @error="handleImageError($event)"
+                    >
+                    <button
+                      class="favorite-btn"
+                      @click="toggleFavorite(book)"
+                      :class="{ active: isFavorite(book.id) }"
+                      :title="isFavorite(book.id) ? 'Quitar de favoritos' : 'Agregar a favoritos'"
+                    >
+                      <i :class="isFavorite(book.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                    </button>
+                    <div class="discount-badge">-{{ book.discountPercentage }}%</div>
+                  </div>
+                  <div class="card-body d-flex flex-column">
+                    <h5 class="card-title">{{ book.title }}</h5>
+                    <p class="card-text">{{ book.author }}</p>
+                    <p class="card-text card-description">{{ book.description }}</p>
+                    <div class="mt-auto">
+                      <div class="price-container mb-2">
+                        <span class="original-price">${{ book.price }}</span>
+                        <span class="discounted-price">${{ book.discountedPrice }}</span>
+                      </div>
+                      <div class="d-flex gap-2">
+                        <button class="btn btn-outline-info flex-grow-1" @click="showBookDetails(book)">
+                          <i class="bi bi-info-circle"></i> Detalles
+                        </button>
+                        <button class="btn btn-primary flex-grow-1" @click="addToCart(book)">
+                          <i class="bi bi-cart-plus"></i> Añadir
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4 d-none d-md-flex">
             <div v-for="book in discountedBooks" :key="book.id" class="col-md-4">
               <div class="card h-100">
                 <div class="card-image-wrapper">
@@ -120,17 +271,24 @@
                   </button>
                   <div class="discount-badge">-{{ book.discountPercentage }}%</div>
                 </div>
-                <div class="card-body">
+                <div class="card-body d-flex flex-column">
                   <h5 class="card-title">{{ book.title }}</h5>
                   <p class="card-text">{{ book.author }}</p>
-                  <p class="card-text">{{ book.description }}</p>
-                  <div class="price-container">
-                    <span class="original-price">${{ book.price }}</span>
-                    <span class="discounted-price">${{ book.discountedPrice }}</span>
+                  <p class="card-text card-description">{{ book.description }}</p>
+                  <div class="mt-auto">
+                    <div class="price-container mb-2">
+                      <span class="original-price">${{ book.price }}</span>
+                      <span class="discounted-price">${{ book.discountedPrice }}</span>
+                    </div>
+                    <div class="d-flex gap-2">
+                      <button class="btn btn-outline-info flex-grow-1" @click="showBookDetails(book)">
+                        <i class="bi bi-info-circle"></i> Detalles
+                      </button>
+                      <button class="btn btn-primary flex-grow-1" @click="addToCart(book)">
+                        <i class="bi bi-cart-plus"></i> Añadir
+                      </button>
+                    </div>
                   </div>
-                  <button class="btn btn-primary w-100" @click="addToCart(book)">
-                    Añadir al carrito
-                  </button>
                 </div>
               </div>
             </div>
@@ -145,7 +303,46 @@
         <!-- Sección de Eventos Importantes -->
         <section v-if="!loading && !error" class="mb-5">
           <h2 class="section-title">Eventos Importantes</h2>
-          <div class="row g-4">
+          <!-- Carrusel para pantallas pequeñas (Eventos Importantes) -->
+          <div class="books-carousel d-md-none">
+            <div class="books-scroll-container">
+              <div v-for="event in events" :key="event.id" class="book-card-item carousel-item-event">
+                <div class="event-card">
+                  <div class="event-image-wrapper">
+                    <img
+                      :src="event.imageUrl && event.imageUrl.trim() !== '' ? event.imageUrl : getPlaceholderImage()"
+                      class="event-image"
+                      :alt="event.title"
+                      @error="handleImageError($event)"
+                    >
+                    <div class="event-date-badge">
+                      <div class="event-day">{{ formatEventDay(event.date) }}</div>
+                      <div class="event-month">{{ formatEventMonth(event.date) }}</div>
+                    </div>
+                  </div>
+                  <div class="event-body d-flex flex-column">
+                    <h5 class="event-title">{{ event.title }}</h5>
+                    <p class="event-description">{{ event.description }}</p>
+                    <div class="mt-auto">
+                      <div class="event-meta">
+                        <span class="event-location">
+                          <i class="bi bi-geo-alt"></i> {{ event.location }}
+                        </span>
+                        <span class="event-time">
+                          <i class="bi bi-clock"></i> {{ event.time }}
+                        </span>
+                      </div>
+                      <button class="btn btn-outline-info w-100 mt-2" @click="showEventDetails(event)">
+                        <i class="bi bi-info-circle"></i> Ver Detalles
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="row g-4 d-none d-md-flex">
             <div v-for="event in events" :key="event.id" class="col-md-4">
               <div class="event-card">
                 <div class="event-image-wrapper">
@@ -160,16 +357,21 @@
                     <div class="event-month">{{ formatEventMonth(event.date) }}</div>
                   </div>
                 </div>
-                <div class="event-body">
+                <div class="event-body d-flex flex-column">
                   <h5 class="event-title">{{ event.title }}</h5>
                   <p class="event-description">{{ event.description }}</p>
-                  <div class="event-meta">
-                    <span class="event-location">
-                      <i class="bi bi-geo-alt"></i> {{ event.location }}
-                    </span>
-                    <span class="event-time">
-                      <i class="bi bi-clock"></i> {{ event.time }}
-                    </span>
+                  <div class="mt-auto">
+                    <div class="event-meta">
+                      <span class="event-location">
+                        <i class="bi bi-geo-alt"></i> {{ event.location }}
+                      </span>
+                      <span class="event-time">
+                        <i class="bi bi-clock"></i> {{ event.time }}
+                      </span>
+                    </div>
+                    <button class="btn btn-outline-info w-100 mt-2" @click="showEventDetails(event)">
+                      <i class="bi bi-info-circle"></i> Ver Detalles
+                    </button>
                   </div>
                 </div>
               </div>
@@ -254,6 +456,121 @@
         </div>
       </div>
     </div>
+
+    <!-- Modal de Detalles de Libro -->
+    <div class="book-modal-overlay" :class="{ show: showDetailsModal }" @click.self="closeDetailsModal">
+      <div class="details-modal-content">
+        <button class="book-modal-close" @click="closeDetailsModal">
+          <i class="bi bi-x-lg"></i>
+        </button>
+        
+        <div v-if="selectedBook" class="details-modal-body">
+          <div class="details-image-section">
+            <img 
+              :src="selectedBook.imageUrl && selectedBook.imageUrl.trim() !== '' ? selectedBook.imageUrl : getPlaceholderImage()" 
+              :alt="selectedBook.title"
+              @error="handleImageError($event)"
+            >
+          </div>
+          <div class="details-info-section">
+            <h2>{{ selectedBook.title }}</h2>
+            <p class="details-author"><i class="bi bi-person"></i> {{ selectedBook.author }}</p>
+            <div class="details-description">
+              <h4>Descripción</h4>
+              <p>{{ selectedBook.description || 'No hay descripción disponible.' }}</p>
+            </div>
+            <div class="details-meta">
+              <div v-if="selectedBook.category" class="meta-item">
+                <i class="bi bi-tag"></i>
+                <span>{{ selectedBook.category }}</span>
+              </div>
+              <div v-if="selectedBook.isbn" class="meta-item">
+                <i class="bi bi-upc"></i>
+                <span>ISBN: {{ selectedBook.isbn }}</span>
+              </div>
+              <div v-if="selectedBook.pages" class="meta-item">
+                <i class="bi bi-file-text"></i>
+                <span>{{ selectedBook.pages }} páginas</span>
+              </div>
+              <div v-if="selectedBook.stock !== undefined" class="meta-item">
+                <i class="bi bi-box"></i>
+                <span>Stock: {{ selectedBook.stock }}</span>
+              </div>
+            </div>
+            <div class="details-price-section">
+              <div v-if="selectedBook.discountPercentage && selectedBook.discountPercentage > 0" class="price-container">
+                <span class="original-price">${{ selectedBook.price }}</span>
+                <span class="discounted-price">${{ selectedBook.discountedPrice }}</span>
+                <span class="discount-badge-inline">-{{ selectedBook.discountPercentage }}%</span>
+              </div>
+              <p v-else class="details-price">${{ selectedBook.price }}</p>
+            </div>
+            <div v-if="selectedBook.status === 'upcoming'" class="details-release">
+              <p><i class="bi bi-calendar-event"></i> Disponible: {{ formatDate(selectedBook.releaseDate) }}</p>
+            </div>
+            <div class="details-actions">
+              <button 
+                v-if="selectedBook.status === 'available' && selectedBook.stock > 0" 
+                class="btn btn-primary" 
+                @click="addToCart(selectedBook); closeDetailsModal()"
+              >
+                <i class="bi bi-cart-plus"></i> Añadir al Carrito
+              </button>
+              <button 
+                v-else-if="selectedBook.status === 'upcoming'" 
+                class="btn btn-primary notify-btn" 
+                @click="notifyMe(selectedBook)"
+              >
+                <i class="bi bi-bell"></i> Notificame cuando esté disponible
+              </button>
+              <button 
+                class="btn btn-outline-danger" 
+                @click="toggleFavorite(selectedBook)"
+                :class="{ active: isFavorite(selectedBook.id) }"
+              >
+                <i :class="isFavorite(selectedBook.id) ? 'bi bi-heart-fill' : 'bi bi-heart'"></i>
+                {{ isFavorite(selectedBook.id) ? 'Quitar de Favoritos' : 'Agregar a Favoritos' }}
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div v-if="selectedEvent" class="details-modal-body">
+          <div class="details-image-section">
+            <img 
+              :src="selectedEvent.imageUrl && selectedEvent.imageUrl.trim() !== '' ? selectedEvent.imageUrl : getPlaceholderImage()" 
+              :alt="selectedEvent.title"
+              @error="handleImageError($event)"
+            >
+            <div class="event-date-badge-large">
+              <div class="event-day">{{ formatEventDay(selectedEvent.date) }}</div>
+              <div class="event-month">{{ formatEventMonth(selectedEvent.date) }}</div>
+            </div>
+          </div>
+          <div class="details-info-section">
+            <h2>{{ selectedEvent.title }}</h2>
+            <div class="details-description">
+              <h4>Descripción</h4>
+              <p>{{ selectedEvent.description || 'No hay descripción disponible.' }}</p>
+            </div>
+            <div class="details-meta">
+              <div class="meta-item">
+                <i class="bi bi-geo-alt"></i>
+                <span>{{ selectedEvent.location }}</span>
+              </div>
+              <div class="meta-item">
+                <i class="bi bi-clock"></i>
+                <span>{{ selectedEvent.time }}</span>
+              </div>
+              <div v-if="selectedEvent.date" class="meta-item">
+                <i class="bi bi-calendar"></i>
+                <span>{{ formatDate(selectedEvent.date) }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -278,7 +595,10 @@ export default {
       events: [],
       loading: true,
       error: null,
-      showCartModal: false
+      showCartModal: false,
+      showDetailsModal: false,
+      selectedBook: null,
+      selectedEvent: null
     };
   },
   computed: {
@@ -311,6 +631,7 @@ export default {
     this.loadEvents();
     this.loadCart();
     this.loadFavorites();
+    this.requestNotificationPermission();
     
     // Guardar referencia a la función para poder removerla después
     this.handleShowCartModal = () => {
@@ -319,11 +640,19 @@ export default {
     
     // Escuchar evento para mostrar el carrito desde el navbar
     window.addEventListener('show-cart-modal', this.handleShowCartModal);
+    
+    // Verificar notificaciones pendientes cada minuto
+    this.notificationCheckInterval = setInterval(() => {
+      this.checkPendingNotifications();
+    }, 60000);
   },
   beforeUnmount() {
     // Limpiar el listener cuando el componente se destruya
     if (this.handleShowCartModal) {
       window.removeEventListener('show-cart-modal', this.handleShowCartModal);
+    }
+    if (this.notificationCheckInterval) {
+      clearInterval(this.notificationCheckInterval);
     }
   },
   methods: {
@@ -544,13 +873,36 @@ export default {
       
       this.saveFavorites();
     },
-    showNotification(message) {
+    checkPendingNotifications() {
+      try {
+        const notifications = JSON.parse(localStorage.getItem('bookNotifications') || '[]');
+        const pendingNotifications = notifications.filter(n => !n.notified);
+        
+        pendingNotifications.forEach(notif => {
+          const book = this.books.find(b => b.id === notif.bookId);
+          if (book && book.status === 'available' && book.stock > 0) {
+            this.sendBookAvailableNotification(book);
+          }
+        });
+      } catch (error) {
+        console.error('Error al verificar notificaciones:', error);
+      }
+    },
+    showNotification(message, type = 'success', duration = 2000) {
       // Crear notificación temporal
       const notification = document.createElement('div');
+      const iconClass = type === 'success' ? 'bi-check-circle-fill' : 
+                       type === 'error' ? 'bi-x-circle-fill' : 
+                       'bi-info-circle-fill';
+      const bgColor = type === 'success' ? 'rgba(76, 201, 240, 0.9)' : 
+                     type === 'error' ? 'rgba(248, 113, 113, 0.9)' : 
+                     'rgba(59, 130, 246, 0.9)';
+      
       notification.className = 'cart-notification show';
+      notification.style.background = bgColor;
       notification.innerHTML = `
         <div class="cart-notification-content">
-          <i class="bi bi-check-circle-fill"></i>
+          <i class="bi ${iconClass}"></i>
           <span>${message}</span>
         </div>
       `;
@@ -559,7 +911,7 @@ export default {
       setTimeout(() => {
         notification.classList.remove('show');
         setTimeout(() => notification.remove(), 300);
-      }, 2000);
+      }, duration);
     },
     getPlaceholderImage() {
       // Retornar una imagen placeholder en base64 o una URL de placeholder service
@@ -590,13 +942,98 @@ export default {
       }
     },
     notifyMe(book) {
-      // Implementar sistema de notificaciones
-      this.notifications.push({
-        bookId: book.id,
-        userId: 'currentUserId', // Obtener del estado de autenticación
-        email: 'user@email.com' // Obtener del estado de autenticación
-      });
-      console.log('Te notificaremos cuando esté disponible:', book.title);
+      try {
+        // Obtener notificaciones existentes
+        const existingNotifications = JSON.parse(localStorage.getItem('bookNotifications') || '[]');
+        
+        // Verificar si ya está registrado
+        const alreadyNotified = existingNotifications.some(notif => notif.bookId === book.id);
+        
+        if (alreadyNotified) {
+          this.showNotification('Ya estás registrado para recibir notificaciones sobre este libro', 'info');
+          return;
+        }
+        
+        // Agregar nueva notificación
+        const newNotification = {
+          bookId: book.id,
+          bookTitle: book.title,
+          bookAuthor: book.author,
+          releaseDate: book.releaseDate ? (book.releaseDate instanceof Date ? book.releaseDate.toISOString() : book.releaseDate) : null,
+          notified: false,
+          createdAt: new Date().toISOString()
+        };
+        
+        existingNotifications.push(newNotification);
+        localStorage.setItem('bookNotifications', JSON.stringify(existingNotifications));
+        
+        this.showNotification(`Te notificaremos cuando "${book.title}" esté disponible`, 'success');
+        
+        // Verificar periódicamente si el libro está disponible
+        this.checkBookAvailability(book);
+      } catch (error) {
+        console.error('Error al registrar notificación:', error);
+        this.showNotification('Error al registrar la notificación', 'error');
+      }
+    },
+    checkBookAvailability(book) {
+      // Verificar cada 30 segundos si el libro cambió de estado
+      const checkInterval = setInterval(() => {
+        const currentBook = this.books.find(b => b.id === book.id);
+        if (currentBook && currentBook.status === 'available' && currentBook.stock > 0) {
+          // El libro está disponible, notificar
+          this.sendBookAvailableNotification(book);
+          clearInterval(checkInterval);
+        }
+      }, 30000);
+      
+      // Limpiar después de 24 horas
+      setTimeout(() => clearInterval(checkInterval), 24 * 60 * 60 * 1000);
+    },
+    sendBookAvailableNotification(book) {
+      try {
+        const notifications = JSON.parse(localStorage.getItem('bookNotifications') || '[]');
+        const notification = notifications.find(n => n.bookId === book.id && !n.notified);
+        
+        if (notification) {
+          notification.notified = true;
+          notification.notifiedAt = new Date().toISOString();
+          localStorage.setItem('bookNotifications', JSON.stringify(notifications));
+          
+          // Mostrar notificación visual
+          this.showNotification(`¡"${book.title}" ya está disponible!`, 'success', 5000);
+          
+          // Opcional: usar la API de notificaciones del navegador
+          if ('Notification' in window && Notification.permission === 'granted') {
+            new Notification(`¡Libro Disponible!`, {
+              body: `${book.title} por ${book.author} ya está disponible para compra`,
+              icon: book.imageUrl || '/favicon.ico'
+            });
+          }
+        }
+      } catch (error) {
+        console.error('Error al enviar notificación:', error);
+      }
+    },
+    requestNotificationPermission() {
+      if ('Notification' in window && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
+    },
+    showBookDetails(book) {
+      this.selectedBook = book;
+      this.selectedEvent = null;
+      this.showDetailsModal = true;
+    },
+    showEventDetails(event) {
+      this.selectedEvent = event;
+      this.selectedBook = null;
+      this.showDetailsModal = true;
+    },
+    closeDetailsModal() {
+      this.showDetailsModal = false;
+      this.selectedBook = null;
+      this.selectedEvent = null;
     }
   }
 };
@@ -908,8 +1345,8 @@ export default {
   position: absolute;
   top: 15px;
   left: 15px;
-  background: rgba(255, 255, 255, 0.2);
-  border: 2px solid var(--glass-border);
+  background: #f8717181;
+  border: 2px solid var(--error-color);
   border-radius: 50%;
   width: 45px;
   height: 45px;
@@ -923,6 +1360,11 @@ export default {
   color: var(--text-primary);
   font-size: 1.3rem;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.favorite-btn i {
+  pointer-events: none;
+  color: var(--error-color);
 }
 
 .favorite-btn:hover {
@@ -953,6 +1395,258 @@ export default {
   margin-right: 1rem;
 }
 
+/* Estilos para cards con altura uniforme */
+.card-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.card-description {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  line-clamp: 3;
+  -webkit-box-orient: vertical;
+  min-height: 60px;
+}
+
+/* Carrusel horizontal para pantallas pequeñas */
+.books-carousel {
+  margin: 0 -1rem;
+  padding: 0 1rem;
+}
+
+.books-scroll-container {
+  display: flex;
+  /* Habilitar scroll snap para una experiencia tipo carrusel */
+  scroll-snap-type: x mandatory;
+  gap: 1rem;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 1rem;
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent-color) rgba(255, 255, 255, 0.1);
+}
+
+.books-scroll-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.books-scroll-container::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+}
+
+.books-scroll-container::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  border-radius: 4px;
+}
+
+.books-scroll-container::-webkit-scrollbar-thumb:hover {
+  background: var(--hover-btn);
+}
+
+.book-card-item {
+  flex: 0 0 280px;
+  min-width: 280px;
+  scroll-snap-align: start;
+}
+
+/* En carrusel mobile hacemos el botón más compacto y con ancho adecuado */
+.books-carousel {
+  min-width: 160px;
+  padding: 0.6rem 0.9rem;
+}
+
+@media (max-width: 480px) {
+  .books-carousel {
+    min-width: 140px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.9rem;
+  }
+
+  .books-carousel i {
+    font-size: 1rem;
+  }
+
+  .notify-btn {
+    padding: 0.4rem 0.8rem;
+    font-size: 0.85rem;
+  }
+}
+
+/* Variante para items de eventos (tamaño ligeramente mayor) */
+.carousel-item-event {
+  flex: 0 0 320px;
+  min-width: 320px;
+  scroll-snap-align: start;
+}
+
+/* Modal de detalles */
+.details-modal-content {
+  background: var(--glass-effect);
+  border: 2px solid var(--glass-border);
+  border-radius: 20px;
+  max-width: 900px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  position: relative;
+}
+
+.details-modal-body {
+  display: flex;
+  gap: 2rem;
+  padding: 2rem;
+}
+
+.details-image-section {
+  flex: 0 0 300px;
+  position: relative;
+}
+
+.details-image-section img {
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.details-info-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.details-info-section h2 {
+  color: var(--text-primary);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  font-family: 'Orbitron', sans-serif;
+}
+
+.details-author {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.details-description h4 {
+  color: var(--text-primary);
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+}
+
+.details-description p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.details-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--glass-border);
+}
+
+.meta-item i {
+  color: var(--accent-color);
+}
+
+.details-price-section {
+  padding: 1rem;
+  background: rgba(76, 201, 240, 0.1);
+  border-radius: 12px;
+  border: 1px solid var(--accent-color);
+}
+
+.details-price {
+  color: var(--accent-color);
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.discount-badge-inline {
+  background: linear-gradient(135deg, var(--accent-secondary), #8b2fc9);
+  color: white;
+  padding: 0.3rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  margin-left: 1rem;
+}
+
+.details-release {
+  color: var(--text-secondary);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.details-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.details-actions .btn {
+  flex: 1;
+  min-width: 150px;
+}
+
+.event-date-badge-large {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, var(--accent-color), var(--hover-btn));
+  color: var(--primary-bg);
+  padding: 1rem;
+  border-radius: 12px;
+  text-align: center;
+  min-width: 70px;
+  box-shadow: 0 4px 15px rgba(76, 201, 240, 0.4);
+}
+
+.event-date-badge-large .event-day {
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.event-date-badge-large .event-month {
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 0.3rem;
+}
+
+
+
 @media (max-width: 768px) {
   .products-container {
     padding: 1rem 0.5rem;
@@ -961,5 +1655,30 @@ export default {
   .section-title {
     font-size: 2rem;
   }
+
+  .details-modal-body {
+    flex-direction: column;
+    padding: 1.5rem;
+  }
+
+  .details-image-section {
+    flex: 0 0 auto;
+  }
+
+  .details-actions {
+    flex-direction: column;
+  }
+
+  .details-actions .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 1180px) {
+  .notify-btn, .detail-btn{
+    font-size: 0.95rem;
+  }
+
+  
 }
 </style>
