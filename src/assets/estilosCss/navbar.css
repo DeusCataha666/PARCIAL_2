@@ -20,9 +20,9 @@
   padding: 0 2px;
 }
 
-a.btn{
+/* a.btn{
   border: none;
-}
+} */
 
  
 .navbar {
@@ -54,6 +54,33 @@ a.btn{
   text-decoration: none;
   justify-content: center;
   margin: 20px;
+}
+
+@media (max-width: 768px) {
+  .logo {
+    font-size: 1.2rem;
+    margin: 10px;
+  }
+
+  .navbar .container {
+    padding: 0.5rem;
+  }
+
+  .navbar-toggler {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .logo {
+    font-size: 1rem;
+    margin: 5px;
+  }
+
+  .navbar {
+    padding: 0.5rem 0;
+  }
 }
 
 .logo-part:last-child {
@@ -98,7 +125,7 @@ a.btn{
 .cart-button {
   position: relative;
   background: linear-gradient(135deg, var(--glass-effect), rgba(76, 201, 240, 0.1));
-  border: 2px solid var(--glass-border);
+  /* border: 2px solid var(--glass-border); */
   border-radius: 12px;
   padding: 0.6rem 1rem;
   color: var(--accent-color);
@@ -158,25 +185,30 @@ a.btn{
   50% { transform: scale(1.1); }
   100% { transform: scale(1); }
 }
+.btn-outline-info{
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--accent-color);
+  box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
+}
 
-.btn-light {
+.btn-outline-info:hover {
+  background: linear-gradient(135deg, var(--hover-btn), var(--accent-color));
+  transform: translateY(-2px);
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 25px rgba(76, 201, 240, 0.5);
+  color: var(--primary-bg);
+}
+
+.btn-primary {
   background: linear-gradient(135deg, var(--accent-color), var(--hover-btn));
   color: var(--primary-bg);
-  border-radius: 12px;
-  padding: 0.6rem 1rem;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  text-decoration: none;
-  font-weight: 700;
+  border: none;
+  box-shadow: 0 4px 15px rgba(76, 201, 240, 0.3);
 }
 
-.btn-light:hover {
-  background: linear-gradient(135deg, var(--hover-btn), var(--accent-color));
-  color: var(--primary-bg);
+.btn-primary:hover {
   transform: translateY(-2px);
+  transition: all 0.3s ease;
   box-shadow: 0 8px 25px rgba(76, 201, 240, 0.5);
 }
-

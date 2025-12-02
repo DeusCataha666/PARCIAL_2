@@ -6,6 +6,8 @@ import RegisterView from "../views/RegisterView.vue";
 import DashboardView from "../views/DashboardView.vue";
 import ProductsView from "../views/ProductsView.vue";
 import AdminPanelView from "../views/AdminPanelView.vue";
+import CheckoutView from "../views/CheckoutView.vue";
+import OrderConfirmationView from "../views/OrderConfirmationView.vue";
 
 const routes = [
   { 
@@ -26,6 +28,18 @@ const routes = [
     name: "AdminPanel", 
     component: AdminPanelView, 
     meta: { requiresAuth: true, requiresAdmin: true } 
+  },
+  { 
+    path: "/checkout", 
+    name: "Checkout", 
+    component: CheckoutView, 
+    meta: { requiresAuth: true } 
+  },
+  { 
+    path: "/order-confirmation/:orderId", 
+    name: "OrderConfirmation", 
+    component: OrderConfirmationView, 
+    meta: { requiresAuth: true } 
   },
 ];
 

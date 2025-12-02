@@ -1,7 +1,7 @@
 <template>
   <div class="admin-panel d-flex">
     <div class="main-content flex-grow-1">
-      
+
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container">
           <router-link class="navbar-brand text-warning fw-bold" to="/admin">
@@ -35,7 +35,7 @@
 
       <div class="conta py-4">
         <div class="row">
-          
+
           <div class="col-12 ">
             <div class="card shadow-sm">
               <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -107,7 +107,7 @@
             </div>
           </div>
 
-          
+
           <div class="col-12">
             <div class="card shadow-sm">
               <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
@@ -155,7 +155,7 @@
       </div>
     </div>
 
-    
+
     <div class="modal fade" id="bookModal" tabindex="-1" ref="bookModal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -223,7 +223,7 @@
       </div>
     </div>
 
-    
+
     <div class="modal fade" id="eventModal" tabindex="-1" ref="eventModal">
       <div class="modal-dialog">
         <div class="modal-content">
@@ -319,7 +319,32 @@ export default {
     this.modal = new Modal(document.getElementById('bookModal'))
     this.eventModal = new Modal(document.getElementById('eventModal'))
   },
+
   methods: {
+    showNotification(message, type = 'success', duration = 2000) {
+      const notification = document.createElement('div');
+      const iconClass = type === 'success' ? 'bi-check-circle-fill' :
+        type === 'error' ? 'bi-x-circle-fill' :
+          'bi-info-circle-fill';
+      const bgColor = type === 'success' ? 'rgba(76, 201, 240, 0.9)' :
+        type === 'error' ? 'rgba(248, 113, 113, 0.9)' :
+          'rgba(59, 130, 246, 0.9)';
+
+      notification.className = 'cart-notification show';
+      notification.style.background = bgColor;
+      notification.innerHTML = `
+        <div class="cart-notification-content">
+          <i class="bi ${iconClass}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, duration);
+    },
     async loadBooks() {
       try {
         const booksCollection = collection(db, 'books')
@@ -362,9 +387,9 @@ export default {
     },
     async updateStock(book) {
       try {
-        
+
         console.log(`Actualizando stock: ${book.id} -> ${book.stock}`)
-        
+
       } catch (error) {
         console.error('Error al actualizar stock:', error)
       }
@@ -372,7 +397,7 @@ export default {
     async updateBook(book) {
       try {
         const bookRef = doc(db, 'books', book.id)
-        
+
         if (book.discountPercentage > 0) {
           book.discountedPrice = book.price * (1 - book.discountPercentage / 100)
         }
@@ -409,24 +434,27 @@ export default {
     async cerrarSesion() {
       try {
         await signOut(auth)
-        this.router.push('/login')
+        this.showNotification('Cerrando sesión', 'info', 2000)
+        setTimeout(() => {
+          this.router.push('/')
+        }, 3000);
       } catch (error) {
         console.error('Error al cerrar sesión:', error)
       }
     },
     async saveBook() {
       try {
-        
+
         if (this.newBook.price < 0 || this.newBook.stock < 0) {
           alert('El precio y el stock no pueden ser negativos')
           return
         }
 
         if (this.newBook.id) {
-          
+
           await this.updateBook(this.newBook)
         } else {
-          
+
           const newBookData = {
             ...this.newBook,
             createdAt: new Date().toISOString()
@@ -436,7 +464,7 @@ export default {
           console.log('Nuevo libro creado exitosamente')
         }
 
-        
+
         this.modal.hide()
         await this.loadBooks()
       } catch (error) {
@@ -491,18 +519,18 @@ export default {
         delete eventData.id
 
         if (this.newEvent.id) {
-          
+
           const eventRef = doc(db, 'events', this.newEvent.id)
           await updateDoc(eventRef, eventData)
           console.log('Evento actualizado exitosamente')
         } else {
-          
+
           const eventsCollection = collection(db, 'events')
           await addDoc(eventsCollection, eventData)
           console.log('Nuevo evento creado exitosamente')
         }
 
-        
+
         this.eventModal.hide()
         await this.loadEvents()
       } catch (error) {

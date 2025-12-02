@@ -342,7 +342,7 @@
             </div>
           </div>
 
-          <div class="row">
+          <div class="row d-none d-md-flex">
             <div v-for="event in events" :key="event.id" class="col-md-4">
               <div class="event-card">
                 <div class="event-image-wrapper">
@@ -827,7 +827,12 @@ export default {
       }
     },
     checkout() {
-      alert('Funcionalidad de pago en desarrollo. Total: $' + this.cartTotal.toFixed(2));
+      if (this.cart.length === 0) {
+        this.showNotification('Tu carrito está vacío', 'error');
+        return;
+      }
+      this.closeCartModal();
+      this.$router.push('/checkout');
     },
     closeCartModal() {
       this.showCartModal = false;

@@ -2,36 +2,37 @@
   <header>
     <nav class="navbar navbar-expand-lg">
       <div class="container">
-        <div class="logo" >
+        <div class="logo">
           <span class="logo-part">NEXUS</span>
           <span class="logo-part">LIBRARY</span>
         </div>
-        <button class="navbar-toggler btn btn-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+        <button class="navbar-toggler btn btn-primary" type="button" data-bs-toggle="collapse"
+          data-bs-target="#navbarNav">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-          <div class="d-flex align-items-center p-5 gap-3">
+          <div class="d-flex align-items-center p-lg-5 p-md-3 p-2 gap-2 gap-md-3 flex-wrap">
             <template v-if="!isAuthenticated">
-              <router-link to="/login" class="btn btn-light">
-                <i class="bi bi-person-circle"></i> Iniciar Sesión
+              <router-link to="/login" class="btn btn-primary">
+                <i class="bi bi-person-circle"></i> <span class="d-none d-sm-inline">Iniciar Sesión</span>
               </router-link>
             </template>
 
             <template v-else>
-              <router-link v-if="isAdmin" to="/admin" class="btn btn-light">
-                <i class="bi bi-gear-fill"></i> Panel Admin
+              <router-link v-if="isAdmin" to="/admin" class="btn btn-primary">
+                <i class="bi bi-gear-fill"></i> <span class="d-none d-sm-inline">Panel Admin</span>
               </router-link>
 
-              <button v-if="!isAdmin" class="btn btn-light" @click="showCart">
-                <i class="bi bi-cart"></i> Carrito
+              <button v-if="!isAdmin" class="btn btn-outline-info text-white" @click="showCart">
+                <i class="bi bi-cart"></i> <span class="d-none d-sm-inline">Carrito</span>
                 <span v-if="cartCount > 0" class="bagde rounded-circle bg-danger text-black">
                   {{ cartCount }}
                 </span>
               </button>
 
-              
-              <button v-if="!isAdmin" class="btn btn-light" @click="showProfile">
-                <i class="bi bi-person-circle"></i> Mi Perfil
+
+              <button v-if="!isAdmin" class="btn btn-primary" @click="showProfile">
+                <i class="bi bi-person-circle"></i> <span class="d-none d-sm-inline">Mi Perfil</span>
               </button>
             </template>
           </div>
@@ -40,13 +41,13 @@
     </nav>
   </header>
 
-  
+
   <div class="profile-modal-overlay" :class="{ show: showProfileModal }" @click.self="closeProfileModal">
     <div class="profile-modal-content">
       <button class="profile-modal-close" @click="closeProfileModal">
         <i class="bi bi-x-lg"></i>
       </button>
-      
+
       <div class="profile-modal-header">
         <div class="profile-avatar">
           <i class="bi bi-person-circle"></i>
@@ -56,7 +57,7 @@
       </div>
 
       <div class="profile-modal-body">
-          <div class="profile-info-section">
+        <div class="profile-info-section">
           <h3><i class="bi bi-info-circle"></i> Información</h3>
           <div class="profile-info-item">
             <label>Email:</label>
@@ -104,13 +105,14 @@
     </div>
   </div>
 
-  
-  <div class="profile-modal-overlay centered-overlay" :class="{ show: showFavoritesModal }" @click.self="closeFavoritesModal">
+
+  <div class="profile-modal-overlay centered-overlay" :class="{ show: showFavoritesModal }"
+    @click.self="closeFavoritesModal">
     <div class="profile-modal-content favorites-modal">
       <button class="profile-modal-close" @click="closeFavoritesModal">
         <i class="bi bi-x-lg"></i>
       </button>
-      
+
       <div class="profile-modal-header">
         <h2><i class="bi bi-heart-fill"></i> Mis Favoritos</h2>
       </div>
@@ -125,11 +127,8 @@
         <div v-else class="favorites-list">
           <div v-for="(item, index) in favoritesList" :key="item.id || index" class="favorite-item">
             <div class="favorite-item-image">
-              <img 
-                :src="item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : getPlaceholderImage()" 
-                :alt="item.title"
-                @error="handleImageError($event)"
-              >
+              <img :src="item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : getPlaceholderImage()"
+                :alt="item.title" @error="handleImageError($event)">
             </div>
             <div class="favorite-item-info">
               <h4>{{ item.title }}</h4>
@@ -145,13 +144,14 @@
     </div>
   </div>
 
-  
-  <div class="profile-modal-overlay centered-overlay" :class="{ show: showCartModalFromProfile }" @click.self="closeCartModalFromProfile">
+
+  <div class="profile-modal-overlay centered-overlay" :class="{ show: showCartModalFromProfile }"
+    @click.self="closeCartModalFromProfile">
     <div class="profile-modal-content cart-modal">
       <button class="profile-modal-close" @click="closeCartModalFromProfile">
         <i class="bi bi-x-lg"></i>
       </button>
-      
+
       <div class="profile-modal-header">
         <h2><i class="bi bi-cart-fill"></i> Mi Carrito</h2>
       </div>
@@ -166,11 +166,8 @@
         <div v-else class="cart-items-list">
           <div v-for="(item, index) in cartList" :key="item.id || index" class="cart-item-profile">
             <div class="cart-item-image">
-              <img 
-                :src="item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : getPlaceholderImage()" 
-                :alt="item.title"
-                @error="handleImageError($event)"
-              >
+              <img :src="item.imageUrl && item.imageUrl.trim() !== '' ? item.imageUrl : getPlaceholderImage()"
+                :alt="item.title" @error="handleImageError($event)">
             </div>
             <div class="cart-item-info">
               <h4>{{ item.title }}</h4>
@@ -186,7 +183,8 @@
                 </button>
               </div>
             </div>
-            <button class="remove-item-btn rounded-circle bg-danger text-black start-0" @click="removeFromCart(item.id)" title="Eliminar">
+            <button class="remove-item-btn rounded-circle bg-danger text-black start-0" @click="removeFromCart(item.id)"
+              title="Eliminar">
               <i class="bi bi-trash"></i>
             </button>
           </div>
@@ -231,7 +229,7 @@ export default {
     }
   },
   mounted() {
-    
+
     onAuthStateChanged(auth, (user) => {
       this.isAuthenticated = !!user;
       if (user) {
@@ -243,10 +241,10 @@ export default {
       }
     });
 
-    
+
     this.updateCounters();
-    
-    
+
+
     window.addEventListener('storage', this.updateCounters);
     this.intervalId = setInterval(this.updateCounters, 1000);
   },
@@ -260,7 +258,10 @@ export default {
     async logout() {
       try {
         await signOut(auth);
-        this.$router.push("/login");
+        this.showNotification('Cerrando sesión', 'info', 2000);
+        setTimeout(() => {
+          this.$router.push("/");
+        }, 3000);
       } catch (error) {
         console.error("Error al cerrar sesión:", error);
       }
@@ -273,7 +274,7 @@ export default {
       this.showProfileModal = false;
     },
     showCart() {
-      
+
       window.dispatchEvent(new CustomEvent('show-cart-modal'));
     },
     updateCounters() {
@@ -361,6 +362,30 @@ export default {
     },
     handleImageError(event) {
       event.target.src = this.getPlaceholderImage();
+    },
+    showNotification(message, type = 'success', duration = 2000) {
+      const notification = document.createElement('div');
+      const iconClass = type === 'success' ? 'bi-check-circle-fill' :
+        type === 'error' ? 'bi-x-circle-fill' :
+          'bi-info-circle-fill';
+      const bgColor = type === 'success' ? 'rgba(76, 201, 240, 0.9)' :
+        type === 'error' ? 'rgba(248, 113, 113, 0.9)' :
+          'rgba(59, 130, 246, 0.9)';
+
+      notification.className = 'cart-notification show';
+      notification.style.background = bgColor;
+      notification.innerHTML = `
+        <div class="cart-notification-content">
+          <i class="bi ${iconClass}"></i>
+          <span>${message}</span>
+        </div>
+      `;
+      document.body.appendChild(notification);
+
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, duration);
     }
   }
 };

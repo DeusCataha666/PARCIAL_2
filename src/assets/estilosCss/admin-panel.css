@@ -17,8 +17,9 @@
 }
 
 .conta {
-  min-width: 1250px;
+  width: 100%;
   padding: 2rem 1rem;
+  overflow-x: auto;
 }
 
 .card {
@@ -388,6 +389,159 @@
 
 .btn:hover {
   transform: translateY(-2px);
+}
+
+/* Responsive Styles */
+@media (max-width: 1200px) {
+  .conta {
+    padding: 1.5rem 0.5rem;
+  }
+
+  .table {
+    font-size: 0.9rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.5rem 0.3rem;
+  }
+
+  .card-header h2 {
+    font-size: 1.2rem;
+  }
+
+  .card-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start !important;
+  }
+
+  .card-header .btn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .conta {
+    padding: 1rem 0.25rem;
+  }
+
+  .table-responsive {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table {
+    min-width: 800px;
+    font-size: 0.85rem;
+  }
+
+  .table th,
+  .table td {
+    padding: 0.4rem 0.2rem;
+    font-size: 0.8rem;
+  }
+
+  .table th {
+    font-size: 0.75rem;
+    white-space: nowrap;
+  }
+
+  .card-header h2 {
+    font-size: 1rem;
+  }
+
+  .card-body {
+    padding: 1rem !important;
+  }
+
+  .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  .form-control-sm,
+  .form-select-sm {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+  }
+
+  .d-flex.gap-2 {
+    flex-direction: column;
+    gap: 0.5rem !important;
+  }
+
+  .d-flex.gap-2 .btn {
+    width: 100%;
+  }
+
+  .modal-dialog {
+    margin: 0.5rem;
+    max-width: calc(100% - 1rem);
+  }
+
+  .custom-form {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .navbar-brand {
+    font-size: 0.9rem;
+  }
+
+  .navbar-brand i {
+    font-size: 1rem;
+  }
+
+  .conta {
+    padding: 0.5rem 0.1rem;
+  }
+
+  .table {
+    min-width: 700px;
+    font-size: 0.75rem;
+  }
+
+  .table th {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.1rem;
+  }
+
+  .table td {
+    font-size: 0.7rem;
+    padding: 0.3rem 0.1rem;
+  }
+
+  .card-header {
+    padding: 0.75rem !important;
+  }
+
+  .card-header h2 {
+    font-size: 0.9rem;
+  }
+
+  .input-group-sm {
+    flex-wrap: wrap;
+  }
+
+  .input-group-sm .form-control {
+    width: 100%;
+    margin-bottom: 0.25rem;
+  }
+
+  .modal-dialog {
+    margin: 0.25rem;
+    max-width: calc(100% - 0.5rem);
+  }
+
+  .modal-body {
+    padding: 1rem 0.75rem !important;
+  }
+
+  .form-label {
+    font-size: 0.85rem;
+  }
 }
 
  
